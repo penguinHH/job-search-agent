@@ -4,7 +4,8 @@ Back-ends ("provider" setting):
   claude_api   Anthropic API (API key, pay per use) - manual streaming tool loop
   claude_cli   Claude Code CLI (`claude -p`, uses the user's Claude subscription); our tools are
                exposed to it through the MCP server in mcp_server.py
-  openai       any OpenAI-compatible endpoint (NemoClaw-style: NVIDIA NIM, DeepSeek, OpenRouter, Ollama …)
+  openai       any OpenAI-compatible endpoint (NVIDIA NIM, DeepSeek, OpenRouter, Ollama …), run on the
+               OpenAI Agents SDK (oa_runner.py)
 
 Every chat keeps a provider-neutral display log (`events`) so the GUI can render history for all back-ends.
 """
@@ -18,10 +19,9 @@ from pathlib import Path
 
 import anthropic
 import keyring
-import requests
 
 from . import store
-from .tools import SEARCH_TOOL, SERVER_TOOLS, TOOL_SCHEMAS, run_tool
+from .tools import SERVER_TOOLS, TOOL_SCHEMAS, run_tool
 
 ROOT = store.ROOT
 HOME = store.HOME
@@ -29,6 +29,7 @@ MODEL = "claude-opus-5-5"
 KEYRING_API = ("jobsearch-anthropic", "api_key")
 KEYRING_OPENAI = "jobsearch-openai"
 KNOWLEDGE = HOME / "knowledge.md"          # shared with Claude Code sessions
+KB_DIR = Path(__file__).parent / "kb"     # general rules shared with Claude Code (outreach, scoring)
 MAX_STEPS = 40
 HIDDEN_CLI_TOOLS = {"ToolSearch"}
 LANG_NAME = {"zh": "Simplified Chinese", "ja": "Japanese", "en": "English"}
@@ -57,7 +58,8 @@ the company's language (Japanese by default, English for English-speaking compan
 # How to work
 - Before applying, check the company record and its live careers page (fetch_url / web search): open roles,
   requirements, location, application channel. Prefer the official channel: ATS form > published recruiting
-  e-mail > contact form. Record what you learn with score_company / save_document.
+  e-mail > contact form. Record what you learn with score_company / save_document. Score with the shared
+  rubric and calibrate against the scoring anchors; write to companies following the shared outreach rules.
 - Outward actions are gated: emails go through queue_email, and submit buttons in the browser are queued
   by browser_click. Tell the user what you queued; never claim something was sent until it is approved
   and executed. Logins, account creation, passwords and CAPTCHAs are always left to the user.
@@ -120,6 +122,10 @@ def provider_status():
     }
 
 
+def shared_rules():
+    return "\n\n".join(f.read_text(encoding="utf-8") for f in sorted(KB_DIR.glob("*.md"))) if KB_DIR.exists() else ""
+
+
 def system_text():
     p = store.profile()
     s = store.stats()
@@ -129,6 +135,7 @@ def system_text():
     name = " / ".join(x for x in (o.get("name"), o.get("name_en"), o.get("nickname")) if x) or "the user"
     return (SYSTEM_RULES.replace("{ui_lang}", lang).replace("{owner_name}", name)
             .replace("{owner_intro}", o.get("agent_intro", "(see the profile below)"))
+            + "\n# Shared rules (agent_app/kb, also used by Claude Code sessions)\n" + shared_rules()
             + "\n# Shared knowledge (Claude Code sessions ⇄ agent)\n" + know
             + "\n# Candidate profile (profile.md)\n" + p["markdown"]
             + f"\n# Now\nToday is {datetime.now():%Y-%m-%d (%a) %H:%M}. Pipeline counts: "
@@ -358,77 +365,13 @@ def _run_claude_cli(chat, user_text, stop_flag):
 
 
 # ---------------------------------------------------------------- 3) OpenAI-compatible (NemoClaw-style)
-def _oa_tools():
-    return [{"type": "function", "function": {"name": t["name"], "description": t["description"],
-                                              "parameters": t["input_schema"]}} for t in TOOL_SCHEMAS + [SEARCH_TOOL]]
-
-
 def _run_openai(chat, user_text, stop_flag):
+    """Open models (OpenAI-compatible endpoints) run on the OpenAI Agents SDK – see oa_runner.py."""
+    from . import oa_runner
     oa = settings()["openai"]
     base, model = oa.get("base_url", "").rstrip("/"), oa.get("model")
     key = openai_key(oa.get("preset", "custom")) or ("ollama" if "localhost" in base else None)
     if not (base and model and key):
         raise RuntimeError("OpenAI 兼容后端没有配置完整（设置 → 模型后端：接口地址、模型名、API key）")
-    msgs = chat["oa_messages"]
-    msgs.append({"role": "user", "content": user_text})
-    _save(chat["id"], oa_messages=msgs)
-    for _ in range(MAX_STEPS):
-        if stop_flag and stop_flag.is_set():
-            yield {"type": "error", "text": "已停止"}
-            return
-        body = {"model": model, "stream": True, "tools": _oa_tools(), "temperature": 0.4,
-                "messages": [{"role": "system", "content": system_text()}] + msgs}
-        r = requests.post(f"{base}/chat/completions", json=body, stream=True, timeout=300,
-                          headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
-        if r.status_code >= 400:
-            raise RuntimeError(f"HTTP {r.status_code}: {r.text[:800]}")
-        text, calls, thinking_started = "", {}, False
-        for raw in r.iter_lines(decode_unicode=True):
-            if stop_flag and stop_flag.is_set():
-                break
-            if not raw or not raw.startswith("data:"):
-                continue
-            data = raw[5:].strip()
-            if data == "[DONE]":
-                break
-            chunk = json.loads(data)
-            if not chunk.get("choices"):
-                continue
-            delta = chunk["choices"][0].get("delta", {})
-            rc = delta.get("reasoning_content") or delta.get("reasoning")
-            if rc:
-                if not thinking_started:
-                    thinking_started = True
-                    yield {"type": "thinking_start"}
-                yield {"type": "thinking", "text": rc}
-            if delta.get("content"):
-                text += delta["content"]
-                yield {"type": "text", "text": delta["content"]}
-            for tc in delta.get("tool_calls") or []:
-                c = calls.setdefault(tc.get("index", 0), {"id": "", "name": "", "args": ""})
-                c["id"] = tc.get("id") or c["id"]
-                fn = tc.get("function") or {}
-                c["name"] += fn.get("name") or ""
-                c["args"] += fn.get("arguments") or ""
-        assistant = {"role": "assistant", "content": text or None}
-        if calls:
-            assistant["tool_calls"] = [{"id": c["id"] or f"call_{i}", "type": "function",
-                                        "function": {"name": c["name"], "arguments": c["args"] or "{}"}}
-                                       for i, c in sorted(calls.items())]
-        msgs.append(assistant)
-        _save(chat["id"], oa_messages=msgs)
-        yield {"type": "turn_end"}
-        if not calls:
-            return
-        parsed = []
-        for tc in assistant["tool_calls"]:
-            try:
-                args = json.loads(tc["function"]["arguments"] or "{}")
-            except json.JSONDecodeError:
-                args = None
-            parsed.append((tc["id"], tc["function"]["name"], args))
-        for ev in _run_tools(parsed, stop_flag):
-            yield ev
-            if ev["type"] == "tool_result":
-                msgs.append({"role": "tool", "tool_call_id": ev["id"], "content": ev["content"][:30000]})
-        _save(chat["id"], oa_messages=msgs)
+    yield from oa_runner.run(chat["oa_messages"], user_text, system_text(), {"base_url": base, "model": model}, key,
+                             stop_flag, on_history=lambda items: _save(chat["id"], oa_messages=items))

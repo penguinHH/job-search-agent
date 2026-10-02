@@ -8,3 +8,5 @@ fastapi
 uvicorn[standard]
 playwright
 keyring
+openai-agents>=0.23
+mcp>=2.2

@@ -16,7 +16,8 @@ reads company replies and tracks every application on a kanban board.
   - **Claude subscription** – drives the local Claude Code CLI (`claude -p`); the agent's tools are exposed
     to it through an MCP server (`agent_app/mcp_server.py`).
   - **Claude API** – Anthropic SDK, `claude-opus-5-5`, adaptive thinking, server-side web search.
-  - **Open models (NemoClaw-style)** – any OpenAI-compatible endpoint: NVIDIA NIM, DeepSeek, OpenRouter, Ollama.
+  - **Open models** – any OpenAI-compatible endpoint (NVIDIA NIM, DeepSeek, OpenRouter, Ollama), run on the
+    OpenAI Agents SDK (`agent_app/oa_runner.py`): SDK agent loop with the app's tools, retries, history trimming.
 - **Safety gate** – nothing outward happens without you: e-mails wait in *Approvals* (editable), submit buttons
   are queued, CAPTCHAs / logins / passwords are always yours.
 - **GUI** – dashboard & funnel, approvals, kanban pipeline (drag to change stage), company DB with detail
@@ -27,6 +28,8 @@ reads company replies and tracks every application on a kanban board.
   grammar, writing principles for e-mails / 履歴書 / CVs / cover letters / form answers) and a fact check against the
   profile. Mode in Settings: off / suggest (you pick which suggestions to apply) / auto (applied directly, undoable).
   The agent can also call `review_text` before filling web forms.
+- **Shared rules** – `agent_app/kb/` (outreach rules, fit-scoring rubric) is loaded into every agent conversation
+  and used by Claude Code sessions too; personal rules and scoring anchors stay in the data folder's `knowledge.md`.
 - **Notes** – study notes (coding tests, problem sets, topics to learn), interview notes (prep, predicted Q&A,
   reverse questions) and a to-do overview. Kanban cards show an icon when a company has open study notes or an
   interview note; the company drawer renders them. The agent reads and writes them (`list_notes` / `get_note` /
