@@ -13,7 +13,7 @@ from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 
-from . import mailer, store
+from . import mailer, reviewer, store
 from .browser import browser
 
 ROOT = store.ROOT          # code
@@ -158,7 +158,28 @@ def save_document(kind, title, content, filename, company_id=None, lang="ja", st
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
     store.archive_document(path, kind, company_id, title, lang, status, missing, content)
-    return f"saved {path.relative_to(HOME).as_posix()}"
+    rid = reviewer.start("document", str(path), kind, company_id, title)
+    return f"saved {path.relative_to(HOME).as_posix()}" + reviewer.summary_line(rid)
+
+
+def review_text(text, doc_kind="form_answer", lang=None, company_id=None, purpose=""):
+    """Blocking review of a short text (form answers, interview answers) before it is used."""
+    r = reviewer.check({"text": text}, doc_kind, lang, company_id, purpose)
+    return _j({"summary": r["summary"], "issues": r["issues"], "revised": r["revised"]["text"],
+               "note": "Show the issues to the user. In auto review mode use the revised text; otherwise ask."
+               if reviewer.mode() != "auto" else "Auto review mode: use the revised text."})
+
+
+def get_review(review_id=None, action_id=None, document_path=None):
+    if review_id:
+        r = reviewer.get(review_id)
+    elif action_id:
+        r = reviewer.latest("action", action_id)
+    else:
+        r = reviewer.latest("document", str(_p(document_path))) if document_path else None
+    if not r:
+        return "no review found"
+    return _j({k: r[k] for k in ("id", "target_kind", "target_ref", "status", "mode", "summary", "issues", "error")})
 
 
 def list_notes(kind=None, company_id=None, status=None):
@@ -228,7 +249,9 @@ def queue_email(to, subject, body, company_id=None, cc=None, attachments=None, a
     if problems:
         return "NOT queued - fix first: " + "; ".join(problems)
     aid = store.add_action("email", subject, p, company_id)
-    return f"email queued for approval as action #{aid}. It is NOT sent until the user approves it in the GUI."
+    rid = reviewer.start("action", aid, "email", company_id, purpose)
+    return (f"email queued for approval as action #{aid}. It is NOT sent until the user approves it in the GUI."
+            + reviewer.summary_line(rid))
 
 
 def list_actions(status="pending"):
@@ -356,6 +379,14 @@ TOOLS = [
         "status": STR, "missing": STRS}, ["kind", "title", "content", "filename"]), save_document),
     ("list_documents", "Registered documents and the ready-to-send PDFs (CVs).", S({"company_id": INT}),
      list_documents),
+    ("review_text", "Ask the reviewer sub-agent (Japanese/English grammar, keigo, writing principles, fact check "
+     "against the profile) to check a short text such as an application-form answer or interview answer BEFORE you "
+     "type it into a form. E-mails (queue_email) and documents (save_document) are reviewed automatically.",
+     S({"text": STR, "doc_kind": {"type": "string", "enum": ["form_answer", "cover_letter", "email", "cv", "rirekisho",
+        "interview", "other"]}, "lang": {"type": "string", "enum": ["ja", "en", "mixed"]}, "company_id": INT,
+        "purpose": STR}, ["text"]), review_text),
+    ("get_review", "Read the reviewer sub-agent's result for an e-mail action, a document or a review id.",
+     S({"review_id": INT, "action_id": INT, "document_path": STR}), get_review),
     ("list_notes", "List notes. kind: 'study' (things the user must learn/practise, e.g. for a coding test or an "
      "interview topic), 'interview' (interview prep for one company: Q&A, reverse questions, logistics), 'todo' "
      "(overall to-do list). Filter by company_id or status (open/done).",

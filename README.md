@@ -22,6 +22,11 @@ reads company replies and tracks every application on a kanban board.
 - **GUI** – dashboard & funnel, approvals, kanban pipeline (drag to change stage), company DB with detail
   drawer, inbox matched to companies (incl. HERP / HRMOS / Talentio / jobcan notifications), documents,
   profile / open questions / shared knowledge, settings. UI and agent language: 中文 / 日本語 / English.
+- **Writing reviewer (sub-agent)** – every e-mail the agent queues and every text document it saves is checked
+  by a separate reviewer with its own knowledge base (`agent_app/reviewer_kb/`: Japanese grammar & keigo, English
+  grammar, writing principles for e-mails / 履歴書 / CVs / cover letters / form answers) and a fact check against the
+  profile. Mode in Settings: off / suggest (you pick which suggestions to apply) / auto (applied directly, undoable).
+  The agent can also call `review_text` before filling web forms.
 - **Notes** – study notes (coding tests, problem sets, topics to learn), interview notes (prep, predicted Q&A,
   reverse questions) and a to-do overview. Kanban cards show an icon when a company has open study notes or an
   interview note; the company drawer renders them. The agent reads and writes them (`list_notes` / `get_note` /

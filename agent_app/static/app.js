@@ -7,6 +7,7 @@ const I18N = {
     brand: "求职 Agent", brandSub: "日本科技创业公司求职",
     nav_dashboard: "总览", nav_chat: "Agent 对话", nav_approvals: "待审批", nav_pipeline: "进度看板", nav_companies: "公司库",
     nav_notes: "笔记", notesSub: "学习笔记、面试笔记和总的待办清单。agent 和 Claude Code 都会读写这里。", tab_study: "学习笔记", tab_interview: "面试笔记", tab_todo: "待办总览", noteStudy: "学习笔记", noteInterview: "面试笔记", noNotes: "还没有笔记", markDone: "标记完成", reopen: "重新打开", editNote: "编辑", saveNote: "保存", cancel: "取消", newNote: "新建笔记", noteTitle: "标题", noteCompany: "关联公司 ID（可空）", noteDue: "截止（可空）", done: "已完成", openN: "{n} 项未完成", general: "通用", hasStudy: "有学习笔记", hasInterview: "有面试笔记", prepNotes: "让 agent 更新笔记",
+    rv_title: "文书审查", rv_running: "审查 agent 检查中…", rv_ok: "审查通过，没有发现问题", rv_n: "{n} 条修改建议", rv_applied: "已应用修改", rv_auto: "已自动修改（可撤销）", rv_failed: "审查失败", rv_dismissed: "已忽略", rv_applySel: "应用所选", rv_applyAll: "全部采用修订版", rv_dismiss: "忽略", rv_revert: "撤销修改", rv_showRevised: "查看修订版全文", rv_run: "让审查 agent 检查", rv_rerun: "重新审查", rv_del: "（删除）", sev_high: "重要", sev_medium: "建议", sev_low: "润色", rv_mode: "文书审查 sub agent", rv_modeSub: "主 agent 写好邮件或文书后，审查 agent 会按日英语法、敬语、文书写作原则和你的档案（防止编造）检查一遍。", rv_mode_off: "关闭", rv_mode_suggest: "提出建议，由我决定", rv_mode_auto: "高度自动：直接修改（保留原文可撤销）", rv_kb: "知识库：agent_app/reviewer_kb/（日语语法与敬语、英语语法、写作原则）；个人规则可写在 资料/reviewer_knowledge.md",
     nav_inbox: "收件箱", nav_documents: "文书", nav_profile: "档案与知识", nav_settings: "设置",
     sync: "同步", syncing: "同步中…", synced: "已同步", theme: "主题",
     prov_claude_api: "Claude API", prov_claude_cli: "Claude 订阅（CLI）", prov_openai: "开放模型（NemoClaw 风格）",
@@ -20,7 +21,7 @@ const I18N = {
     newChat: "新对话", del: "删除", confirmDel: "删除这个对话？", placeholder: "告诉 agent 要做什么…（Enter 发送，Shift+Enter 换行）",
     send: "发送", stop: "停止", thinking: "思考中…", gateNote: "发邮件和提交表单都会先进入「待审批」", interrupted: "连接中断：",
     welcomeT: "我能帮你做什么？", welcomeS: "查公司库、上网调研、写中日英文书、发邮件（需审批）、填网页表单（提交需审批）、读回信、记录进度。",
-    caps: [["🔎 调研公司", "从公司库挑公司并给出评分排名"], ["✉️ 投递", "写应募文、准备附件、填表单"], ["📮 回信处理", "抓取邮件、总结、起草回复"], ["🗓️ 面试准备", "生成面试问答与自我介绍"], ["📈 进度管理", "更新阶段、提醒跟进"], ["🧾 文书", "生成履歴書 / 英文简历"]],
+    caps: [["调研公司", "从公司库挑公司并给出评分排名"], ["投递", "写应募文、准备附件、填表单"], ["回信处理", "抓取邮件、总结、起草回复"], ["面试准备", "生成面试问答与自我介绍"], ["进度管理", "更新阶段、提醒跟进"], ["文书", "生成履歴書 / 英文简历"]],
     capPrompts: ["从公司库里挑 10 家最适合我的、还没联系过的公司，查看招聘页后评分排名", "帮我选一家还没投的高分公司，准备好投递（邮件进待审批，表单帮我填好）", "检查新邮件，总结公司回信并起草回复", "帮我准备下一场面试：可能的问题、回答要点和 1 分钟自我介绍（日语）", "看一下进度，告诉我今天该做什么", "根据最新档案重新生成全部简历 PDF"],
     approvalsSub: "agent 准备好的对外动作，批准后才会执行", noPending: "没有待审批的动作", history: "历史",
     email: "邮件", form: "网页表单", account: "发件账户", to: "收件人", cc: "抄送", subject: "主题", body: "正文",
@@ -61,6 +62,7 @@ const I18N = {
     brand: "就活エージェント", brandSub: "日本のテック系スタートアップ",
     nav_dashboard: "ダッシュボード", nav_chat: "エージェント", nav_approvals: "承認待ち", nav_pipeline: "選考ボード", nav_companies: "企業DB",
     nav_notes: "ノート", notesSub: "学習ノート・面接ノート・全体の To Do。エージェントと Claude Code の両方が読み書きします。", tab_study: "学習ノート", tab_interview: "面接ノート", tab_todo: "To Do 一覧", noteStudy: "学習ノート", noteInterview: "面接ノート", noNotes: "ノートはまだありません", markDone: "完了にする", reopen: "未完了に戻す", editNote: "編集", saveNote: "保存", cancel: "キャンセル", newNote: "新規ノート", noteTitle: "タイトル", noteCompany: "関連企業 ID（任意）", noteDue: "期限（任意）", done: "完了", openN: "未完了 {n} 件", general: "共通", hasStudy: "学習ノートあり", hasInterview: "面接ノートあり", prepNotes: "エージェントにノートを更新させる",
+    rv_title: "文書レビュー", rv_running: "レビューエージェントが確認中…", rv_ok: "問題は見つかりませんでした", rv_n: "修正提案 {n} 件", rv_applied: "修正を反映済み", rv_auto: "自動で修正済み（元に戻せます）", rv_failed: "レビュー失敗", rv_dismissed: "無視しました", rv_applySel: "選択した提案を反映", rv_applyAll: "修正版をすべて採用", rv_dismiss: "無視", rv_revert: "元に戻す", rv_showRevised: "修正版の全文を表示", rv_run: "レビューエージェントに確認させる", rv_rerun: "再レビュー", rv_del: "（削除）", sev_high: "重要", sev_medium: "提案", sev_low: "推敲", rv_mode: "文書レビュー サブエージェント", rv_modeSub: "メインエージェントがメールや書類を作ると、レビューエージェントが日英文法・敬語・書類作成の原則・プロフィールとの事実整合をチェックします。", rv_mode_off: "オフ", rv_mode_suggest: "提案のみ（反映は自分で決める）", rv_mode_auto: "高度自動：直接修正（元に戻せます）", rv_kb: "知識ベース：agent_app/reviewer_kb/（日本語文法・敬語、英文法、書類の原則）。個人ルールは 資料/reviewer_knowledge.md に。",
     nav_inbox: "受信箱", nav_documents: "書類", nav_profile: "プロフィール", nav_settings: "設定",
     sync: "同期", syncing: "同期中…", synced: "同期しました", theme: "テーマ",
     prov_claude_api: "Claude API", prov_claude_cli: "Claude サブスク（CLI）", prov_openai: "オープンモデル（NemoClaw 風）",
@@ -74,7 +76,7 @@ const I18N = {
     newChat: "新しい会話", del: "削除", confirmDel: "この会話を削除しますか？", placeholder: "エージェントへの指示…（Enterで送信、Shift+Enterで改行）",
     send: "送信", stop: "停止", thinking: "考え中…", gateNote: "メール送信とフォーム提出は必ず「承認待ち」を経由します", interrupted: "接続が切れました：",
     welcomeT: "何をお手伝いしましょう？", welcomeS: "企業DB検索、Web調査、中日英の書類作成、メール送信（承認制）、フォーム入力（提出は承認制）、返信対応、進捗管理。",
-    caps: [["🔎 企業調査", "企業を選んでスコアリング"], ["✉️ 応募", "応募文・添付・フォーム入力"], ["📮 返信対応", "メール取得・要約・返信案"], ["🗓️ 面接準備", "想定問答と自己紹介"], ["📈 進捗管理", "ステージ更新とフォロー"], ["🧾 書類", "履歴書・英文レジュメ生成"]],
+    caps: [["企業調査", "企業を選んでスコアリング"], ["応募", "応募文・添付・フォーム入力"], ["返信対応", "メール取得・要約・返信案"], ["面接準備", "想定問答と自己紹介"], ["進捗管理", "ステージ更新とフォロー"], ["書類", "履歴書・英文レジュメ生成"]],
     capPrompts: ["企業DBから未連絡で最も合う10社を選び、採用ページを確認してスコアと順位を付けて", "未応募の高スコア企業を1社選んで応募準備をして（メールは承認待ちへ、フォームは入力まで）", "新着メールを確認して企業からの返信を要約し、返信案を作成して", "次の面接の準備：想定質問、回答の要点、1分間の自己紹介（日本語）", "進捗を見て、今日やるべきことを教えて", "最新のプロフィールで全ての履歴書PDFを再生成して"],
     approvalsSub: "エージェントが準備した対外アクション。承認後に実行されます", noPending: "承認待ちはありません", history: "履歴",
     email: "メール", form: "Webフォーム", account: "送信アカウント", to: "宛先", cc: "CC", subject: "件名", body: "本文",
@@ -115,6 +117,7 @@ const I18N = {
     brand: "Job Agent", brandSub: "Japan tech-startup search",
     nav_dashboard: "Dashboard", nav_chat: "Agent", nav_approvals: "Approvals", nav_pipeline: "Pipeline", nav_companies: "Companies",
     nav_notes: "Notes", notesSub: "Study notes, interview notes and the overall to-do list. Read and written by the agent and Claude Code.", tab_study: "Study", tab_interview: "Interviews", tab_todo: "To-do overview", noteStudy: "Study notes", noteInterview: "Interview notes", noNotes: "No notes yet", markDone: "Mark done", reopen: "Reopen", editNote: "Edit", saveNote: "Save", cancel: "Cancel", newNote: "New note", noteTitle: "Title", noteCompany: "Company ID (optional)", noteDue: "Due (optional)", done: "Done", openN: "{n} open", general: "General", hasStudy: "Has study notes", hasInterview: "Has interview notes", prepNotes: "Ask the agent to update notes",
+    rv_title: "Writing review", rv_running: "Reviewer is checking…", rv_ok: "No issues found", rv_n: "{n} suggestions", rv_applied: "Changes applied", rv_auto: "Auto-corrected (can undo)", rv_failed: "Review failed", rv_dismissed: "Dismissed", rv_applySel: "Apply selected", rv_applyAll: "Use revised version", rv_dismiss: "Dismiss", rv_revert: "Undo", rv_showRevised: "Show full revised text", rv_run: "Ask the reviewer", rv_rerun: "Review again", rv_del: "(delete)", sev_high: "Important", sev_medium: "Suggestion", sev_low: "Polish", rv_mode: "Writing reviewer sub-agent", rv_modeSub: "After the main agent writes an e-mail or document, the reviewer checks Japanese/English grammar, keigo, writing principles and facts against your profile.", rv_mode_off: "Off", rv_mode_suggest: "Suggest – I decide", rv_mode_auto: "Highly automatic – apply directly (original kept for undo)", rv_kb: "Knowledge base: agent_app/reviewer_kb/ (Japanese grammar & keigo, English grammar, writing principles); personal rules in 资料/reviewer_knowledge.md",
     nav_inbox: "Inbox", nav_documents: "Documents", nav_profile: "Profile & notes", nav_settings: "Settings",
     sync: "Sync", syncing: "Syncing…", synced: "Synced", theme: "Theme",
     prov_claude_api: "Claude API", prov_claude_cli: "Claude subscription (CLI)", prov_openai: "Open models (NemoClaw-style)",
@@ -128,7 +131,7 @@ const I18N = {
     newChat: "New chat", del: "Delete", confirmDel: "Delete this chat?", placeholder: "Tell the agent what to do… (Enter to send, Shift+Enter for a new line)",
     send: "Send", stop: "Stop", thinking: "Thinking…", gateNote: "Emails and form submissions always go to Approvals first", interrupted: "Connection lost: ",
     welcomeT: "What can I do for you?", welcomeS: "Search the company DB, research online, write in Chinese/Japanese/English, send email (approved), fill web forms (submit approved), handle replies, track progress.",
-    caps: [["🔎 Research", "Pick and score companies"], ["✉️ Apply", "Cover notes, attachments, forms"], ["📮 Replies", "Fetch, summarise, draft replies"], ["🗓️ Interviews", "Likely questions & self-intro"], ["📈 Progress", "Stages and follow-ups"], ["🧾 Documents", "Regenerate CV PDFs"]],
+    caps: [["Research", "Pick and score companies"], ["Apply", "Cover notes, attachments, forms"], ["Replies", "Fetch, summarise, draft replies"], ["Interviews", "Likely questions & self-intro"], ["Progress", "Stages and follow-ups"], ["Documents", "Regenerate CV PDFs"]],
     capPrompts: ["Pick the 10 best-fitting companies I have not contacted, check their careers pages, score and rank them", "Pick one high-scoring company I haven't applied to and prepare the application (emails to approvals, forms filled)", "Check new mail, summarise company replies and draft answers", "Prepare my next interview: likely questions, talking points and a 1-minute self-introduction in Japanese", "Look at my pipeline and tell me what to do today", "Regenerate all CV PDFs from the latest profile"],
     approvalsSub: "Outward actions prepared by the agent – nothing happens until you approve", noPending: "Nothing to approve", history: "History",
     email: "Email", form: "Web form", account: "Account", to: "To", cc: "Cc", subject: "Subject", body: "Body",
@@ -170,7 +173,7 @@ let LANG = "zh";
 const T = (k, vars) => { let s = (I18N[LANG] && I18N[LANG][k]) ?? I18N.zh[k] ?? k; if (vars) for (const [a, b] of Object.entries(vars)) s = s.replace(`{${a}}`, b); return s; };
 const STAGES = ["shortlisted", "drafted", "sent", "replied", "interview", "offer", "rejected", "closed"];
 const STAGE_COLOR = { shortlisted: "", drafted: "orange", sent: "blue", replied: "green", interview: "green", offer: "green", rejected: "red", closed: "" };
-const STAGE_HEX = { shortlisted: "#94a3b8", drafted: "#f59e0b", sent: "#6366f1", replied: "#10b981", interview: "#059669", offer: "#16a34a", rejected: "#f43f5e", closed: "#64748b" };
+const STAGE_HEX = { shortlisted: "#cfcfcb", drafted: "#d8b47c", sent: "#94afe0", replied: "#86c1a2", interview: "#4f9f75", offer: "#2b7d52", rejected: "#e0a3a8", closed: "#cfcfcb" };
 
 // ================================================================== helpers
 const $ = (s, el = document) => el.querySelector(s);
@@ -294,7 +297,7 @@ function providerMenu(anchor) {
     ["claude_api", "claude_cli", "openai"].map((p) => h("div", { class: "opt" + (SETTINGS.provider === p ? " on" : ""), onclick: async () => { await api("/api/settings/agent", { method: "POST", body: { provider: p } }); m.remove(); await loadSettings(); toast(T("prov_" + p)); route(); } },
       h("span", { class: "pill", style: "height:auto;padding:4px;border:0" }, h("span", { class: "dot" + (SETTINGS.providers[p].ready ? "" : " off") })),
       h("div", {}, h("div", { class: "t" }, T("prov_" + p), SETTINGS.providers[p].ready ? null : h("span", { class: "badge orange", style: "margin-left:6px" }, T("notReady"))), h("div", { class: "d" }, T("provd_" + p))))),
-    h("div", { class: "opt", onclick: () => { m.remove(); go("settings"); } }, h("div", { class: "d" }, "⚙️ " + T("nav_settings") + " →")));
+    h("div", { class: "opt", onclick: () => { m.remove(); go("settings"); } }, h("div", { class: "d" }, T("nav_settings") + " →")));
   document.body.append(m);
   setTimeout(() => document.addEventListener("click", function off(e) { if (!m.contains(e.target)) { m.remove(); document.removeEventListener("click", off); } }), 0);
 }
@@ -330,7 +333,7 @@ pages.dashboard = async (main) => {
   const stat = (n, l, ic, cls, page) => h("div", { class: "card stat", onclick: () => go(page) }, h("div", { class: "ic " + cls }, icon(ic)), h("div", {}, h("div", { class: "n" }, n), h("div", { class: "l" }, l)));
   const total = Object.values(p).reduce((a, b) => a + b, 0) || 1;
   main.append(h("div", { class: "page" },
-    h("div", { class: "card hero" }, h("div", { class: "grow" }, h("h1", {}, T("hello", { name: (LANG === "en" ? OWNER.nickname || OWNER.name_en : OWNER.short_name) || "" }) + " 👋"), h("p", {}, T("heroSub")),
+    h("div", { class: "card hero" }, h("div", { class: "grow" }, h("h1", {}, T("hello", { name: (LANG === "en" ? OWNER.nickname || OWNER.name_en : OWNER.short_name) || "" })), h("p", {}, T("heroSub")),
       h("div", { class: "chips", style: "margin:14px 0 0;max-width:none" }, T("quick").map((t) => h("span", { class: "chip", onclick: () => askAgent(t) }, t))))),
     h("div", { class: "grid cols-6", style: "margin-top:16px" },
       stat(s.companies, T("st_companies"), "building", "c-indigo", "companies"), stat(applied, T("st_applied"), "send", "c-sky", "pipeline"),
@@ -389,7 +392,7 @@ pages.chat = async (main, arg) => {
         h("span", { class: "x", title: T("del"), onclick: async (e) => { e.stopPropagation(); if (confirm(T("confirmDel"))) { await api(`/api/chats/${c.id}`, { method: "DELETE" }); go("chat"); } } }, "✕")))),
     h("div", { class: "chat-main" }, msgs,
       h("div", { class: "composer" },
-        h("div", { class: "box" }, input, h("div", { class: "row", style: "margin-top:6px" }, h("span", { class: "muted small", style: "margin-right:auto" }, "🛡️ " + T("gateNote") + " · " + provName()), stopBtn, sendBtn))))));
+        h("div", { class: "box" }, input, h("div", { class: "row", style: "margin-top:6px" }, h("span", { class: "muted small", style: "margin-right:auto" }, "" + T("gateNote") + " · " + provName()), stopBtn, sendBtn))))));
 
   const chat = await api(`/api/chats/${chatId}`);
   const turnEl = (who) => {
@@ -463,11 +466,53 @@ pages.chat = async (main, arg) => {
 };
 
 // ================================================================== approvals
+// ================================================================== reviewer sub-agent panel
+const SEV_CLASS = { high: "red", medium: "orange", low: "" };
+function reviewPanel(target_kind, target_ref, r, onChanged) {
+  const box = h("div", { class: "review" });
+  const run = async () => { const nr = await api("/api/reviews", { method: "POST", body: { target_kind, target_ref } }); r = nr; render(); };
+  async function refresh() { r = await api(`/api/reviews/${r.id}`); render(); }
+  function render() {
+    box.innerHTML = "";
+    const head = h("div", { class: "row review-head" }, icon("check"), h("b", {}, T("rv_title")));
+    box.append(head);
+    if (!r) { head.append(h("span", { class: "muted small" }, "—"), h("button", { class: "btn sm", style: "margin-left:auto", onclick: run }, icon("spark"), T("rv_run"))); return; }
+    if (r.status === "running") { head.append(h("span", { class: "muted small" }, h("span", { class: "spin" }), " ", T("rv_running"))); setTimeout(() => { if (box.isConnected) refresh(); }, 3000); return; }
+    if (r.status === "failed") { head.append(h("span", { class: "badge red" }, T("rv_failed")), h("button", { class: "btn sm", style: "margin-left:auto", onclick: run }, T("rv_rerun"))); box.append(h("div", { class: "muted small" }, r.error || "")); return; }
+    const issues = r.issues || [];
+    const label = r.status === "dismissed" ? T("rv_dismissed") : r.status === "applied" ? (r.mode === "auto" ? T("rv_auto") : T("rv_applied")) : issues.length ? T("rv_n", { n: issues.length }) : T("rv_ok");
+    head.append(h("span", { class: "badge " + (r.status === "applied" || !issues.length ? "green" : "orange") }, label), h("button", { class: "btn sm", style: "margin-left:auto", onclick: run }, T("rv_rerun")));
+    if (r.summary) box.append(h("div", { class: "small", style: "margin:6px 0" }, r.summary));
+    const checks = [];
+    if (issues.length) box.append(h("div", { class: "review-list" }, issues.map((it) => {
+      const cb = h("input", { type: "checkbox", checked: it.severity !== "low" && !it.applied, disabled: r.status !== "done" });
+      checks.push(cb);
+      return h("label", { class: "review-item" + (it.applied ? " applied" : "") }, cb,
+        h("div", { class: "grow" }, h("div", { class: "row", style: "gap:6px" }, h("span", { class: "badge " + (SEV_CLASS[it.severity] || "") }, T("sev_" + it.severity)), h("span", { class: "badge" }, it.category || ""), it.field ? h("span", { class: "muted small" }, it.field) : null),
+          h("div", { class: "diff" }, h("del", {}, it.quote || ""), " → ", h("ins", {}, it.suggestion === "" ? T("rv_del") : it.suggestion || "")),
+          h("div", { class: "muted small" }, it.reason || "")));
+    })));
+    if (issues.length) box.append(h("details", { class: "small" }, h("summary", {}, T("rv_showRevised")),
+      ...Object.entries(r.revised || {}).map(([k, v]) => h("div", {}, h("div", { class: "muted small" }, k), h("div", { class: "pre" }, v)))));
+    const act = h("div", { class: "row end", style: "margin-top:8px" });
+    const done = async (p) => { try { await p; toast(T("saved")); if (onChanged) onChanged(); } catch (e) { toast(e.message, 6000); } };
+    if (r.status === "done" && issues.length) act.append(
+      h("button", { class: "btn sm", onclick: () => done(api(`/api/reviews/${r.id}/dismiss`, { method: "POST" })) }, T("rv_dismiss")),
+      h("button", { class: "btn sm", onclick: () => done(api(`/api/reviews/${r.id}/apply`, { method: "POST", body: { issues: checks.map((c, i) => c.checked ? i : -1).filter((i) => i >= 0) } })) }, T("rv_applySel")),
+      h("button", { class: "btn sm primary", onclick: () => done(api(`/api/reviews/${r.id}/apply`, { method: "POST", body: {} })) }, T("rv_applyAll")));
+    if (r.status === "applied") act.append(h("button", { class: "btn sm", onclick: () => done(api(`/api/reviews/${r.id}/revert`, { method: "POST" })) }, T("rv_revert")));
+    if (act.childNodes.length) box.append(act);
+  }
+  render();
+  return box;
+}
+
 pages.approvals = async (main) => {
   const all = await api("/api/actions");
+  const RV = Object.fromEntries((await api("/api/reviews?target_kind=action")).map((r) => [String(r.target_ref), r]));
   const pending = all.filter((a) => a.status === "pending"), done = all.filter((a) => a.status !== "pending");
   const page = h("div", { class: "page" }, h("div", { class: "muted", style: "margin-bottom:14px" }, T("approvalsSub")));
-  if (!pending.length) page.append(h("div", { class: "card empty" }, "🎉 " + T("noPending")));
+  if (!pending.length) page.append(h("div", { class: "card empty" }, T("noPending")));
   for (const a of pending) page.append(a.kind === "email" ? emailCard(a) : formCard(a));
   page.append(h("h2", { style: "margin-top:26px" }, T("history")),
     h("div", { class: "card", style: "padding:0;overflow:auto" }, h("table", { class: "tbl" },
@@ -491,7 +536,8 @@ pages.approvals = async (main) => {
       h("div", { class: "field" }, h("label", {}, `${T("account")} / ${T("to")} / ${T("cc")}`), h("div", { class: "row" }, acc, to, cc)),
       h("div", { class: "field" }, h("label", {}, T("subject")), subj),
       h("div", { class: "field" }, h("label", {}, T("body")), body),
-      h("div", { class: "field" }, h("label", {}, T("attachments")), att, h("div", { class: "row" }, (p.attachments || []).map((f) => h("a", { href: `/api/file?path=${encodeURIComponent(f)}&download=1`, target: "_blank", class: "badge blue" }, "📎 " + f.split("/").pop())))),
+      h("div", { class: "field" }, h("label", {}, T("attachments")), att, h("div", { class: "row" }, (p.attachments || []).map((f) => h("a", { href: `/api/file?path=${encodeURIComponent(f)}&download=1`, target: "_blank", class: "badge blue" }, f.split("/").pop())))),
+      reviewPanel("action", a.id, RV[String(a.id)], () => route()),
       h("div", { class: "row end" },
         h("button", { class: "btn danger", onclick: async () => { await api(`/api/actions/${a.id}/reject`, { method: "POST", body: {} }); toast(T("rejected")); route(); } }, T("reject")),
         h("button", { class: "btn", onclick: async () => { const r = await api(`/api/actions/${a.id}`, { method: "PUT", body: { payload: collect() } }); toast(r.problems?.length ? r.problems.join("; ") : T("saved")); } }, T("saveEdit")),
@@ -650,7 +696,7 @@ pages.inbox = async (main, arg) => {
     if (!items.length) listBox.append(h("div", { class: "empty" }, T("noMails")));
     for (const m of items) listBox.append(h("div", { class: `mailrow ${m.status}` + (String(m.id) === arg ? " active" : ""), onclick: () => go("inbox", m.id) },
       h("div", { class: "row" }, h("span", { class: "s ellipsis grow" }, m.subject || "—"), m.status === "new" ? h("span", { class: "badge blue" }, T("unread")) : null),
-      h("div", { class: "row muted small" }, h("span", { class: "ellipsis grow" }, m.company ? "🏢 " + m.company : (m.from_name || m.from_addr)), h("span", {}, (m.date || "").slice(5, 16)))));
+      h("div", { class: "row muted small" }, h("span", { class: "ellipsis grow" }, m.company ? m.company : (m.from_name || m.from_addr)), h("span", {}, (m.date || "").slice(5, 16)))));
   }
   async function show(id) {
     const m = await api(`/api/inbox/${id}`);
@@ -732,6 +778,10 @@ pages.notes = async (main, arg) => {
 
 pages.documents = async (main) => {
   const { documents, finals } = await api("/api/documents");
+  const RV = Object.fromEntries((await api("/api/reviews?target_kind=document")).map((r) => [r.target_ref, r]));
+  const rvBadge = (d) => { const r = RV[d.path]; if (!r) return null; const n = (r.issues || []).length;
+    return h("span", { class: "badge " + (r.status === "running" ? "" : r.status === "failed" ? "red" : r.status === "applied" || !n ? "green" : "orange"), title: T("rv_title") },
+      r.status === "running" ? "…" : r.status === "applied" ? "✓" : r.status === "failed" ? "!" : n ? String(n) : "✓"); };
   const page = h("div", { class: "page wide" });
   const buildBtn = (variant, label) => h("button", { class: "btn", onclick: async (e) => { const b = e.currentTarget; b.disabled = true; b.textContent = T("generating"); try { await api("/api/documents/build", { method: "POST", body: { variant } }); toast(T("regenerated")); route(); } catch (err) { toast(err.message, 6000); b.disabled = false; } } }, label);
   page.append(h("div", { class: "card" }, h("h2", {}, icon("documents"), T("readyPdf")),
@@ -740,9 +790,9 @@ pages.documents = async (main) => {
     h("div", { class: "row", style: "margin-top:12px" }, h("span", { class: "muted" }, T("regen")), buildBtn("rirekisho", T("rireki")), buildBtn("en", T("resumeEn")), buildBtn("en_no_phone", T("resumeNoPhone")), buildBtn("all", T("all")))));
   const editor = h("div");
   page.append(h("div", { class: "card", style: "margin-top:16px;padding:0;overflow:auto" }, h("table", { class: "tbl" },
-    h("tr", {}, [T("kind"), T("title"), T("company"), T("lang"), T("status"), T("updated"), ""].map((x) => h("th", {}, x))),
+    h("tr", {}, [T("kind"), T("title"), T("company"), T("lang"), T("status"), T("rv_title"), T("updated"), ""].map((x) => h("th", {}, x))),
     documents.map((d) => h("tr", {}, h("td", {}, h("span", { class: "badge" }, d.kind)), h("td", {}, d.title || d.path.split(/[\\/]/).pop()), h("td", {}, d.company || T("general")), h("td", {}, d.lang),
-      h("td", {}, h("span", { class: `badge ${{ final: "green", submitted: "blue", needs_info: "orange" }[d.status] || ""}` }, d.status)), h("td", { class: "muted small" }, (d.updated_at || d.created_at || "").slice(0, 16)),
+      h("td", {}, h("span", { class: `badge ${{ final: "green", submitted: "blue", needs_info: "orange" }[d.status] || ""}` }, d.status)), h("td", {}, rvBadge(d)), h("td", { class: "muted small" }, (d.updated_at || d.created_at || "").slice(0, 16)),
       h("td", {}, /\.(md|txt)$/i.test(d.path) ? h("button", { class: "btn sm", onclick: () => edit(d.path) }, T("viewEdit")) : h("a", { class: "btn sm", href: `/api/file?path=${encodeURIComponent(d.path)}&download=1` }, T("download"))))))), editor);
   async function edit(path) {
     const rel = path.replace(/\\/g, "/").replace(/^.*?\/outbox\//, "outbox/");
@@ -750,7 +800,8 @@ pages.documents = async (main) => {
     const ta = h("textarea", { class: "input mono", rows: 26 }, f.text);
     editor.innerHTML = "";
     editor.append(h("div", { class: "card", style: "margin-top:16px" }, h("div", { class: "row", style: "margin-bottom:10px" }, h("b", {}, rel), h("span", { style: "margin-left:auto" }),
-      h("button", { class: "btn primary", onclick: async () => { await api("/api/file", { method: "PUT", body: { path: rel, text: ta.value } }); toast(T("saved")); } }, T("save"))), ta));
+      h("button", { class: "btn primary", onclick: async () => { await api("/api/file", { method: "PUT", body: { path: rel, text: ta.value } }); toast(T("saved")); } }, T("save"))), ta,
+      reviewPanel("document", path, RV[path], async () => { const f2 = await api(`/api/file?path=${encodeURIComponent(rel)}`); ta.value = f2.text; })));
     editor.scrollIntoView({ behavior: "smooth" });
   }
   main.append(page);
@@ -775,7 +826,7 @@ pages.profile = async (main) => {
             h("button", { class: "btn sm danger", onclick: async () => { await api(`/api/questions/${q.id}/answer`, { method: "POST", body: { answer: "", drop: true } }); route(); } }, T("notNeeded")),
             h("button", { class: "btn sm", onclick: () => { if (inp.value.trim()) askAgent(`Answer to question #${q.id} "${q.question}": ${inp.value}\nRecord the answer, update profile.md and any affected documents.`); } }, T("submitAgent")),
             h("button", { class: "btn sm primary", onclick: async () => { if (!inp.value.trim()) return; await api(`/api/questions/${q.id}/answer`, { method: "POST", body: { answer: inp.value } }); toast(T("recorded")); route(); } }, T("submit"))));
-      }) : h("div", { class: "card empty" }, "🎉 " + T("none"))),
+      }) : h("div", { class: "card empty" }, T("none"))),
       h("div", { class: "card" }, h("h2", {}, T("answered")), h("div", { class: "list" }, closed.slice(0, 50).map((q) => h("div", { class: "li", style: "align-items:flex-start" },
         h("span", { class: `badge ${q.status === "answered" ? "green" : ""}` }, q.status === "answered" ? T("answered") : T("dropped")), h("div", { class: "grow" }, h("div", { class: "small" }, q.question), h("div", { class: "muted small" }, q.answer || ""))))))));
   } else {
@@ -812,9 +863,12 @@ pages.settings = async (main) => {
     h("div", { class: "field" }, h("label", {}, T("preset")), preset), h("div", { class: "field" }, h("label", {}, T("baseUrl")), base),
     h("div", { class: "field" }, h("label", {}, T("modelName")), model), h("div", { class: "field" }, h("label", {}, T("oaKey")), oakey),
     h("div", { class: "row" }, h("span", { class: "muted small grow" }, T("oaNote")), h("button", { class: "btn primary", onclick: async () => { await api("/api/settings/agent", { method: "POST", body: { openai: { preset: preset.value, base_url: base.value.trim(), model: model.value.trim() }, openai_key: oakey.value } }); toast(T("saved")); route(); } }, T("save"))));
+  const rvMode = h("div", { class: "row", style: "gap:8px;flex-wrap:wrap" }, ["off", "suggest", "auto"].map((m) => h("label", { class: "provcard" + (s.review_mode === m ? " on" : ""), style: "flex:1;min-width:200px;cursor:pointer" },
+    h("input", { type: "radio", name: "rvmode", checked: s.review_mode === m, onchange: async () => { await api("/api/settings/agent", { method: "POST", body: { review_mode: m } }); toast(T("saved")); route(); } }), " ", h("b", {}, T("rv_mode_" + m)))));
+  page.append(h("div", { class: "card", style: "margin-bottom:16px" }, h("h2", {}, icon("check"), T("rv_mode")), h("div", { class: "muted", style: "margin:-6px 0 12px" }, T("rv_modeSub")), rvMode, h("div", { class: "muted small", style: "margin-top:8px" }, T("rv_kb"))));
   page.append(h("div", { class: "card" }, h("h2", {}, icon("spark"), T("backend")), h("div", { class: "muted", style: "margin:-6px 0 12px" }, T("backendSub")),
     h("div", { class: "grid cols-3" }, provCard("claude_api", apiBody), provCard("claude_cli", cliBody), provCard("openai", oaBody))));
-  page.append(h("div", { class: "card", style: "margin-top:16px" }, h("h2", {}, "🌐 " + T("uiLang")),
+  page.append(h("div", { class: "card", style: "margin-top:16px" }, h("h2", {}, T("uiLang")),
     h("div", { class: "seg" }, [["zh", "中文"], ["ja", "日本語"], ["en", "English"]].map(([v, l]) => h("button", { class: LANG === v ? "on" : "", onclick: () => setLang(v) }, l)))));
   page.append(h("div", { class: "card", style: "margin-top:16px" }, h("h2", {}, icon("mail"), T("mailAccounts")), h("div", { class: "muted small", style: "margin-bottom:10px" }, T("mailNote")),
     s.accounts.map((a) => {
@@ -824,7 +878,7 @@ pages.settings = async (main) => {
         h("button", { class: "btn", onclick: async (e) => { if (!pw.value) return; const b = e.currentTarget; b.disabled = true; try { await api(`/api/settings/mail/${a.id}/password`, { method: "POST", body: { password: pw.value } }); toast(T("loginOk")); route(); } catch (err) { toast(err.message, 6000); b.disabled = false; } } }, T("verifySave")),
         h("label", { class: "row small", style: "gap:4px" }, h("input", { type: "radio", name: "defacc", checked: s.default_account === a.id, onchange: async () => { await api("/api/settings/default_account", { method: "POST", body: { account: a.id } }); toast(T("defaultChanged")); } }), T("defaultSend")));
     })));
-  page.append(h("div", { class: "card", style: "margin-top:16px" }, h("h2", {}, "🛡️ " + T("rules")), h("ul", { style: "margin:0" }, ["rule1", "rule2", "rule3", "rule4"].map((r) => h("li", {}, T(r))))));
+  page.append(h("div", { class: "card", style: "margin-top:16px" }, h("h2", {}, "" + T("rules")), h("ul", { style: "margin:0" }, ["rule1", "rule2", "rule3", "rule4"].map((r) => h("li", {}, T(r))))));
   main.append(page);
 };
 

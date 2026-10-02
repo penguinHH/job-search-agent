@@ -7,7 +7,7 @@ from fastapi import Body, FastAPI, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
-from . import agent, mailer, store, tools
+from . import agent, mailer, reviewer, store, tools
 from .browser import browser
 
 STATIC = Path(__file__).parent / "static"
@@ -172,6 +172,63 @@ def delete_note(nid: int):
     return {"ok": True}
 
 
+# ---------------------------------------------------------------- reviewer sub-agent
+@app.get("/api/reviews")
+def reviews(target_kind: str = ""):
+    return reviewer.list_reviews(target_kind or None)
+
+
+@app.get("/api/reviews/{rid}")
+def get_review(rid: int):
+    r = reviewer.get(rid)
+    if not r:
+        raise HTTPException(404)
+    return r
+
+
+@app.post("/api/reviews")
+def start_review(body: dict = Body(...)):
+    """Manual review of an e-mail action or a document (works even when review_mode is off)."""
+    kind, ref = body["target_kind"], body["target_ref"]
+    if kind == "document":
+        p = (store.HOME / ref).resolve() if not Path(ref).is_absolute() else Path(ref).resolve()
+        if not p.is_relative_to(store.HOME) or not p.exists():
+            raise HTTPException(404)
+        d = store.row("SELECT kind, company_id FROM documents WHERE path=?", (str(p),)) or {}
+        rid = reviewer.start("document", str(p), d.get("kind", "other"), d.get("company_id"), force=True)
+    else:
+        a = next((x for x in store.actions() if x["id"] == int(ref)), None)
+        if not a:
+            raise HTTPException(404)
+        rid = reviewer.start("action", a["id"], "email", a["company_id"], a["payload"].get("purpose", ""), force=True)
+    if not rid:
+        raise HTTPException(400, "this file type cannot be reviewed")
+    return reviewer.get(rid)
+
+
+@app.post("/api/reviews/{rid}/apply")
+def apply_review(rid: int, body: dict = Body(default={})):
+    try:
+        return reviewer.apply(rid, body.get("issues"))
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+
+
+@app.post("/api/reviews/{rid}/revert")
+def revert_review(rid: int):
+    try:
+        reviewer.revert(rid)
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+    return {"ok": True}
+
+
+@app.post("/api/reviews/{rid}/dismiss")
+def dismiss_review(rid: int):
+    reviewer.dismiss(rid)
+    return {"ok": True}
+
+
 # ---------------------------------------------------------------- approval queue
 @app.get("/api/actions")
 def actions(status: str = ""):
@@ -194,6 +251,8 @@ def approve(aid: int):
     if not a or a["status"] != "pending":
         raise HTTPException(400, "not pending")
     p = a["payload"]
+    if a["kind"] == "email" and reviewer.blocking_review("action", aid):
+        raise HTTPException(409, "审查 sub agent 还在检查这封邮件（自动修改模式），请稍等几秒再发送")
     try:
         if a["kind"] == "email":
             mid = mailer.send(p)
@@ -319,7 +378,7 @@ def settings():
     return {"api_key_set": bool(agent.api_key()), "model": agent.MODEL, "accounts": mailer.accounts(),
             "default_account": mailer.default_account(), "provider": s["provider"], "lang": s["lang"],
             "cli_model": s["cli_model"], "openai": s["openai"], "presets": agent.OPENAI_PRESETS,
-            "providers": agent.provider_status(),
+            "providers": agent.provider_status(), "review_mode": reviewer.mode(),
             "openai_keys": {p: bool(agent.openai_key(p)) for p in agent.OPENAI_PRESETS},
             "owner": {k: store.owner().get(k) for k in ("name", "name_en", "short_name", "nickname", "avatar", "subtitle")}}
 
@@ -329,6 +388,8 @@ def agent_settings(body: dict = Body(...)):
     for k in ("provider", "lang", "cli_model", "openai"):
         if k in body:
             store.set_setting(k, body[k])
+    if body.get("review_mode") in reviewer.MODES:
+        store.set_setting("review_mode", body["review_mode"])
     if body.get("openai_key"):
         agent.set_openai_key((body.get("openai") or agent.settings()["openai"]).get("preset", "custom"),
                              body["openai_key"])
