@@ -1,0 +1,17 @@
+{
+  "name": "山田 花子",
+  "name_en": "Hanako Yamada",
+  "short_name": "花子",
+  "nickname": "Hanako",
+  "avatar": "山",
+  "subtitle": {"zh": "硕士 · 2027 新卒", "ja": "修士 · 2027卒", "en": "MSc · class of 2027"},
+  "agent_intro": "One or two sentences about you for the agent: degree, field, work experience, what kind of job you want, when you can start, visa situation.",
+  "mail_accounts": [
+    {"id": "gmail", "label": "Gmail", "address": "you@gmail.com", "display_name": "山田 花子（Hanako Yamada）",
+     "smtp_host": "smtp.gmail.com", "smtp_port": 587, "imap_host": "imap.gmail.com"}
+  ],
+  "resume_builds": {
+    "en": {"script": "profile/make_resume_en.py", "args": [], "docx": "outbox/common/Resume_EN.docx",
+           "pdf": "outbox/common/final/Resume.pdf"}
+  }
+}

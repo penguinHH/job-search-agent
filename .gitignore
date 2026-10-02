@@ -1,0 +1,20 @@
+# personal data folder (database, profile, CVs, mails, browser login) – never commit
+资料/
+/data/
+/outbox/
+/profile/
+
+# Claude Code project settings and personal skills
+.claude/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

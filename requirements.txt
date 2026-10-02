@@ -1,0 +1,10 @@
+anthropic>=1.9
+requests
+beautifulsoup4
+pypdf
+python-docx
+pydantic
+fastapi
+uvicorn[standard]
+playwright
+keyring
