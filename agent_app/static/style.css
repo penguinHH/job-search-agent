@@ -201,3 +201,21 @@ table.tbl { width: 100%; border-collapse: separate; border-spacing: 0; }
 .provcard { border: 1.5px solid var(--line); border-radius: 14px; padding: 14px; cursor: pointer; transition: all .15s; }
 .provcard:hover { border-color: var(--accent); } .provcard.on { border-color: var(--accent); background: var(--accent-soft); }
 .provcard .t { font-weight: 700; display: flex; align-items: center; gap: 8px; } .provcard .d { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+
+/* notes */
+.note-ic { display: inline-flex; width: 20px; height: 20px; border-radius: 6px; align-items: center; justify-content: center; flex: none; }
+.note-ic .i { width: 13px; height: 13px; }
+.note-ic.study { background: var(--info-soft); color: var(--info); }
+.note-ic.interview { background: var(--warn-soft); color: var(--warn); }
+.note-card h2 { display: flex; align-items: center; gap: 6px; }
+.note-card.interview { border-left: 3px solid var(--warn); }
+.note-card.study { border-left: 3px solid var(--info); }
+.note-card details { border-top: 1px solid var(--line); padding: 8px 0; }
+.note-card details:first-of-type { border-top: 0; }
+.note-card summary { display: flex; align-items: center; gap: 6px; cursor: pointer; list-style: none; }
+.note-card summary::-webkit-details-marker { display: none; }
+.note-card summary::before { content: "▸"; color: var(--muted); }
+.note-card details[open] summary::before { content: "▾"; }
+.note-card .md { margin-top: 8px; }
+.note-li.done b { color: var(--muted); text-decoration: line-through; }
+.tabs button.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 650; }

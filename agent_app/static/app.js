@@ -6,6 +6,7 @@ const I18N = {
   zh: {
     brand: "求职 Agent", brandSub: "日本科技创业公司求职",
     nav_dashboard: "总览", nav_chat: "Agent 对话", nav_approvals: "待审批", nav_pipeline: "进度看板", nav_companies: "公司库",
+    nav_notes: "笔记", notesSub: "学习笔记、面试笔记和总的待办清单。agent 和 Claude Code 都会读写这里。", tab_study: "学习笔记", tab_interview: "面试笔记", tab_todo: "待办总览", noteStudy: "学习笔记", noteInterview: "面试笔记", noNotes: "还没有笔记", markDone: "标记完成", reopen: "重新打开", editNote: "编辑", saveNote: "保存", cancel: "取消", newNote: "新建笔记", noteTitle: "标题", noteCompany: "关联公司 ID（可空）", noteDue: "截止（可空）", done: "已完成", openN: "{n} 项未完成", general: "通用", hasStudy: "有学习笔记", hasInterview: "有面试笔记", prepNotes: "让 agent 更新笔记",
     nav_inbox: "收件箱", nav_documents: "文书", nav_profile: "档案与知识", nav_settings: "设置",
     sync: "同步", syncing: "同步中…", synced: "已同步", theme: "主题",
     prov_claude_api: "Claude API", prov_claude_cli: "Claude 订阅（CLI）", prov_openai: "开放模型（NemoClaw 风格）",
@@ -59,6 +60,7 @@ const I18N = {
   ja: {
     brand: "就活エージェント", brandSub: "日本のテック系スタートアップ",
     nav_dashboard: "ダッシュボード", nav_chat: "エージェント", nav_approvals: "承認待ち", nav_pipeline: "選考ボード", nav_companies: "企業DB",
+    nav_notes: "ノート", notesSub: "学習ノート・面接ノート・全体の To Do。エージェントと Claude Code の両方が読み書きします。", tab_study: "学習ノート", tab_interview: "面接ノート", tab_todo: "To Do 一覧", noteStudy: "学習ノート", noteInterview: "面接ノート", noNotes: "ノートはまだありません", markDone: "完了にする", reopen: "未完了に戻す", editNote: "編集", saveNote: "保存", cancel: "キャンセル", newNote: "新規ノート", noteTitle: "タイトル", noteCompany: "関連企業 ID（任意）", noteDue: "期限（任意）", done: "完了", openN: "未完了 {n} 件", general: "共通", hasStudy: "学習ノートあり", hasInterview: "面接ノートあり", prepNotes: "エージェントにノートを更新させる",
     nav_inbox: "受信箱", nav_documents: "書類", nav_profile: "プロフィール", nav_settings: "設定",
     sync: "同期", syncing: "同期中…", synced: "同期しました", theme: "テーマ",
     prov_claude_api: "Claude API", prov_claude_cli: "Claude サブスク（CLI）", prov_openai: "オープンモデル（NemoClaw 風）",
@@ -112,6 +114,7 @@ const I18N = {
   en: {
     brand: "Job Agent", brandSub: "Japan tech-startup search",
     nav_dashboard: "Dashboard", nav_chat: "Agent", nav_approvals: "Approvals", nav_pipeline: "Pipeline", nav_companies: "Companies",
+    nav_notes: "Notes", notesSub: "Study notes, interview notes and the overall to-do list. Read and written by the agent and Claude Code.", tab_study: "Study", tab_interview: "Interviews", tab_todo: "To-do overview", noteStudy: "Study notes", noteInterview: "Interview notes", noNotes: "No notes yet", markDone: "Mark done", reopen: "Reopen", editNote: "Edit", saveNote: "Save", cancel: "Cancel", newNote: "New note", noteTitle: "Title", noteCompany: "Company ID (optional)", noteDue: "Due (optional)", done: "Done", openN: "{n} open", general: "General", hasStudy: "Has study notes", hasInterview: "Has interview notes", prepNotes: "Ask the agent to update notes",
     nav_inbox: "Inbox", nav_documents: "Documents", nav_profile: "Profile & notes", nav_settings: "Settings",
     sync: "Sync", syncing: "Syncing…", synced: "Synced", theme: "Theme",
     prov_claude_api: "Claude API", prov_claude_cli: "Claude subscription (CLI)", prov_openai: "Open models (NemoClaw-style)",
@@ -204,6 +207,8 @@ const ICONS = {
   mail: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/>', check: '<path d="M20 6L9 17l-5-5"/>',
   building: '<path d="M3 21h18M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>', help: '<circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4.5M12 17.5h.01"/>',
   plus: '<path d="M12 5v14M5 12h14"/>', x: '<path d="M18 6L6 18M6 6l12 12"/>', clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>',
+  notes: '<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 21.5V4.5M8 7h8M8 11h6"/>',
+  interview: '<rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4M8 21h8"/>',
   bot: '<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9 17h6"/>',
 };
 const icon = (n) => { const s = document.createElementNS("http://www.w3.org/2000/svg", "svg"); s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("class", "i"); s.innerHTML = ICONS[n] || ""; return s; };
@@ -240,7 +245,8 @@ function md(src) {
     if (inCode) { out += line + "\n"; continue; }
     if (/^\s*\|.*\|\s*$/.test(line)) { closeList(); table.push(line.trim()); continue; } else flushTable();
     let m;
-    if ((m = line.match(/^(#{1,4})\s+(.*)/))) { closeList(); out += `<h3>${inline(m[2])}</h3>`; }
+    if (/^\s*(-{3,}|\*{3,})\s*$/.test(line)) { closeList(); out += "<hr>"; }
+    else if ((m = line.match(/^(#{1,4})\s+(.*)/))) { closeList(); out += `<h3>${inline(m[2])}</h3>`; }
     else if ((m = line.match(/^\s*[-*]\s+(.*)/))) { if (inList !== "ul") { closeList(); out += "<ul>"; inList = "ul"; } out += `<li>${inline(m[1])}</li>`; }
     else if ((m = line.match(/^\s*\d+[.)]\s+(.*)/))) { if (inList !== "ol") { closeList(); out += "<ol>"; inList = "ol"; } out += `<li>${inline(m[1])}</li>`; }
     else if ((m = line.match(/^&gt;\s?(.*)/))) { closeList(); out += `<blockquote>${inline(m[1])}</blockquote>`; }
@@ -253,7 +259,7 @@ function md(src) {
 
 // ================================================================== shell (sidebar + topbar)
 let SETTINGS = null, BADGES = {}, OWNER = {};
-const NAV = ["dashboard", "chat", "approvals", "pipeline", "companies", "inbox", "documents", "profile"];
+const NAV = ["dashboard", "chat", "approvals", "pipeline", "companies", "inbox", "notes", "documents", "profile"];
 function renderSide() {
   const side = $("#side"); side.innerHTML = "";
   const cur = (location.hash.slice(1) || "dashboard").split("/")[0];
@@ -520,7 +526,9 @@ pages.pipeline = async (main) => {
     const col = h("div", { class: "col", style: `border-top-color:${STAGE_HEX[st]}` },
       h("h3", {}, h("span", {}, SL(st)), h("span", { class: "badge" }, its.length)),
       its.map((it) => h("div", { class: "kcard" + (it.followup_due ? " due" : ""), draggable: "true", ondragstart: (e) => e.dataTransfer.setData("text/plain", it.id), onclick: () => openCompany(it.id) },
-        h("div", { class: "t ellipsis" }, it.name),
+        h("div", { class: "row", style: "gap:6px;flex-wrap:nowrap" }, h("div", { class: "t ellipsis grow" }, it.name),
+          it.interview_notes ? h("span", { class: "note-ic interview", title: T("hasInterview") }, icon("interview")) : null,
+          it.study_notes ? h("span", { class: "note-ic study", title: T("hasStudy") }, icon("notes")) : null),
         h("div", { class: "row", style: "gap:4px;margin-top:4px" }, typeBadge(it.types), it.score != null ? scoreEl(it.score) : null, it.followup_due ? h("span", { class: "badge orange" }, T("dueTag")) : null),
         h("div", { class: "n" }, it.note || ""), h("div", { class: "muted", style: "font-size:11px;margin-top:4px" }, (it.created_at || "").slice(0, 16)))));
     col.addEventListener("dragover", (e) => { e.preventDefault(); col.classList.add("drop"); });
@@ -575,6 +583,22 @@ pages.companies = async (main) => {
   main.append(page); load();
 };
 
+// notes shown inside the company drawer: interview notes open, study notes collapsible
+function companyNotes(c, close) {
+  const iv = (c.notes || []).filter((n) => n.kind === "interview"), st = (c.notes || []).filter((n) => n.kind === "study");
+  const out = [];
+  if (iv.length) out.push(h("div", { class: "section card note-card interview" },
+    h("h2", {}, icon("interview"), T("noteInterview")),
+    iv.map((n) => h("details", { open: true }, h("summary", {}, h("b", {}, n.title), h("span", { class: "muted small", style: "margin-left:8px" }, (n.updated_at || "").slice(0, 16)),
+      h("a", { href: "#notes/" + n.id, style: "margin-left:auto", onclick: close }, T("editNote"))), noteBody(n)))));
+  if (st.length) out.push(h("div", { class: "section card note-card study" },
+    h("h2", {}, icon("notes"), T("noteStudy"), h("span", { class: "badge", style: "margin-left:8px" }, T("openN", { n: st.filter((n) => n.status !== "done").length }))),
+    st.map((n) => h("details", {}, h("summary", {}, n.status === "done" ? h("span", { class: "badge green" }, T("done")) : null, h("b", {}, n.title), n.due ? h("span", { class: "badge orange", style: "margin-left:6px" }, n.due) : null,
+      h("a", { href: "#notes/" + n.id, style: "margin-left:auto", onclick: close }, T("editNote"))), noteBody(n)))));
+  return out;
+}
+function noteBody(n) { const d = h("div", { class: "md" }); d.innerHTML = md(n.body || ""); return d; }
+
 async function openCompany(id) {
   const c = await api(`/api/companies/${id}`);
   const close = () => { bg.remove(); dr.remove(); };
@@ -595,6 +619,7 @@ async function openCompany(id) {
       h("button", { class: "btn primary", onclick: () => { close(); askAgent(`Research #${c.id} ${c.name}: check the careers page and recent news, evaluate fit, score it, and tell me which role to apply for and through which channel.`); } }, icon("spark"), T("research")),
       h("button", { class: "btn", onclick: () => { close(); askAgent(`Prepare an application to #${c.id} ${c.name}: confirm the role and channel, write the application text in the company's language (email → approval queue; web form → fill it in the browser and wait for my approval before submitting).`); } }, icon("send"), T("apply")),
       h("button", { class: "btn", onclick: async (e) => { e.currentTarget.disabled = true; await api(`/api/companies/${c.id}/enrich`, { method: "POST" }); close(); openCompany(c.id); } }, icon("sync"), T("rescrape"))),
+    ...companyNotes(c, close),
     m ? h("div", { class: "section card" }, h("h2", {}, `${T("fitTitle")} · ${m.score}`), h("div", {}, h("b", {}, T("fitRoles")), list(m.fit_roles).join(" / ")),
       h("ul", {}, list(m.reasons).map((r) => h("li", {}, r))), list(m.concerns).length ? h("div", { class: "muted" }, T("concerns") + list(m.concerns).join("; ")) : null) : null,
     h("div", { class: "section" }, h("h2", {}, T("progress")),
@@ -643,6 +668,68 @@ pages.inbox = async (main, arg) => {
 };
 
 // ================================================================== documents
+// ================================================================== notes (study / interview / to-do)
+let NOTE_TAB = "study";
+pages.notes = async (main, arg) => {
+  const page = h("div", { class: "page wide" });
+  let all = await api("/api/notes");
+  if (arg) { const n = all.find((x) => String(x.id) === String(arg)); if (n) NOTE_TAB = n.kind; }
+  const tabs = h("div", { class: "tabs" });
+  const listBox = h("div", { class: "card", style: "padding:0" }), view = h("div", { class: "card" });
+  page.append(h("div", { class: "row", style: "margin-bottom:10px" }, h("span", { class: "muted" }, T("notesSub")), h("span", { style: "margin-left:auto" }),
+    h("button", { class: "btn", onclick: () => askAgent("Read my notes (list_notes), check the pipeline and recent mail, then update the study notes, interview notes and the overall to-do note so they match the current state.") }, icon("spark"), T("prepNotes")),
+    h("button", { class: "btn primary", onclick: () => edit({ kind: NOTE_TAB, title: "", body: "", company_id: null, status: "open" }) }, icon("plus"), T("newNote"))),
+    tabs, h("div", { class: "split" }, listBox, view));
+  function renderTabs() {
+    tabs.innerHTML = "";
+    for (const k of ["study", "interview", "todo"]) {
+      const n = all.filter((x) => x.kind === k && (k === "interview" || x.status !== "done")).length;
+      tabs.append(h("button", { class: NOTE_TAB === k ? "active" : "", onclick: () => { NOTE_TAB = k; renderTabs(); renderList(); } }, icon(k === "interview" ? "interview" : "notes"), " ", T("tab_" + k), n ? h("span", { class: "badge", style: "margin-left:6px" }, n) : null));
+    }
+  }
+  function renderList(selId) {
+    listBox.innerHTML = "";
+    const its = all.filter((x) => x.kind === NOTE_TAB);
+    if (!its.length) { listBox.append(h("div", { class: "muted", style: "padding:16px" }, T("noNotes"))); view.innerHTML = ""; return; }
+    for (const n of its) {
+      listBox.append(h("div", { class: "li click note-li" + (n.status === "done" ? " done" : ""), onclick: () => show(n.id) },
+        h("div", { class: "grow" }, h("div", { class: "ellipsis" }, h("b", {}, n.title)),
+          h("div", { class: "muted small" }, n.company ? `${n.company} · ` : `${T("general")} · `, (n.updated_at || n.created_at || "").slice(0, 16))),
+        n.due ? h("span", { class: "badge orange" }, n.due) : null, n.status === "done" ? h("span", { class: "badge green" }, T("done")) : null));
+    }
+    show(selId || (its.find((x) => String(x.id) === String(arg)) || its[0]).id);
+  }
+  async function show(id) {
+    const n = await api(`/api/notes/${id}`);
+    view.innerHTML = "";
+    view.append(h("div", { class: "row", style: "margin-bottom:8px" },
+      h("div", { class: "grow" }, h("div", { style: "font-size:17px;font-weight:750" }, n.title),
+        h("div", { class: "muted small" }, n.company ? h("a", { href: "javascript:void 0", onclick: () => openCompany(n.company_id) }, n.company) : T("general"), n.due ? ` · ${n.due}` : "")),
+      n.kind !== "interview" ? h("button", { class: "btn sm", onclick: async () => { await api(`/api/notes/${n.id}/status`, { method: "POST", body: { status: n.status === "done" ? "open" : "done" } }); all = await api("/api/notes"); renderTabs(); renderList(n.id); } }, icon("check"), n.status === "done" ? T("reopen") : T("markDone")) : null,
+      h("button", { class: "btn sm", onclick: () => edit(n) }, T("editNote")),
+      h("button", { class: "btn sm", onclick: async () => { if (!confirm(T("del") + "?")) return; await api(`/api/notes/${n.id}`, { method: "DELETE" }); all = await api("/api/notes"); renderTabs(); renderList(); } }, icon("x"))),
+      noteBody(n));
+  }
+  function edit(n) {
+    view.innerHTML = "";
+    const title = h("input", { class: "input", placeholder: T("noteTitle"), value: n.title || "", style: "width:100%" });
+    const kind = h("select", { class: "input" }, ["study", "interview", "todo"].map((k) => h("option", { value: k, selected: n.kind === k }, T("tab_" + k))));
+    const cid = h("input", { class: "input", placeholder: T("noteCompany"), value: n.company_id ?? "", style: "width:170px" });
+    const due = h("input", { class: "input", placeholder: T("noteDue"), value: n.due || "", style: "width:150px" });
+    const body = h("textarea", { class: "input", style: "width:100%;height:60vh;font-family:var(--mono);font-size:13px" });
+    body.value = n.body || "";
+    view.append(h("div", { class: "row", style: "margin-bottom:8px" }, kind, cid, due), title, h("div", { style: "height:8px" }), body,
+      h("div", { class: "row", style: "margin-top:8px;justify-content:flex-end" },
+        h("button", { class: "btn", onclick: () => n.id ? show(n.id) : renderList() }, T("cancel")),
+        h("button", { class: "btn primary", onclick: async () => {
+          const saved = await api("/api/notes", { method: "POST", body: { id: n.id, kind: kind.value, title: title.value || "untitled", body: body.value, company_id: cid.value ? Number(cid.value) : null, due: due.value || null, status: n.status || "open" } });
+          toast(T("saved")); all = await api("/api/notes"); NOTE_TAB = saved.kind; renderTabs(); renderList(saved.id);
+        } }, T("saveNote"))));
+  }
+  renderTabs(); renderList(arg);
+  main.append(page);
+};
+
 pages.documents = async (main) => {
   const { documents, finals } = await api("/api/documents");
   const page = h("div", { class: "page wide" });

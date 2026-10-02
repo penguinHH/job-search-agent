@@ -58,7 +58,20 @@ CREATE TABLE IF NOT EXISTS settings (
     key   TEXT PRIMARY KEY,
     value TEXT
 );
+CREATE TABLE IF NOT EXISTS notes (              -- study notes / interview notes / to-do overview (markdown)
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    kind        TEXT,          -- study / interview / todo
+    company_id  INTEGER,       -- NULL = general note
+    title       TEXT,
+    body        TEXT,
+    status      TEXT DEFAULT 'open',   -- open / done
+    due         TEXT,
+    created_at  TEXT DEFAULT (datetime('now','localtime')),
+    updated_at  TEXT
+);
 """
+
+NOTE_KINDS = ("study", "interview", "todo")
 
 _local = threading.local()
 
@@ -162,6 +175,7 @@ def company(cid, full=False):
     c["mails"] = rows("SELECT id,account,from_addr,subject,date,status FROM inbox WHERE company_id=? ORDER BY date DESC",
                       (cid,))
     c["actions"] = rows("SELECT id,kind,title,status,created_at FROM actions WHERE company_id=? ORDER BY id DESC", (cid,))
+    c["notes"] = notes(company_id=cid)
     return c
 
 
@@ -187,10 +201,65 @@ def pipeline():
     first_sent = {r["company_id"]: r["t"] for r in rows(
         "SELECT company_id, min(created_at) t FROM outreach WHERE stage='sent' GROUP BY company_id")}
     cutoff = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
+    flags = note_flags()
     for it in items:
         it["sent_at"] = first_sent.get(it["id"])
         it["followup_due"] = it["stage"] == "sent" and bool(it["sent_at"]) and it["sent_at"] < cutoff
+        f = flags.get(it["id"], {})
+        it["study_notes"] = f.get("study", 0)          # open study notes
+        it["interview_notes"] = f.get("interview", 0)
     return items
+
+
+# ---------------------------------------------------------------- notes (study / interview / todo)
+def notes(kind=None, company_id=None, status=None):
+    sql = ["SELECT n.*, c.name company FROM notes n LEFT JOIN companies c ON c.id=n.company_id WHERE 1=1"]
+    args = []
+    if kind:
+        sql.append("AND n.kind=?"); args.append(kind)
+    if company_id is not None:
+        sql.append("AND n.company_id=?"); args.append(company_id)
+    if status:
+        sql.append("AND n.status=?"); args.append(status)
+    sql.append("ORDER BY n.status='done', n.due IS NULL, n.due, n.id")
+    return rows(" ".join(sql), args)
+
+
+def note(nid):
+    return row("SELECT n.*, c.name company FROM notes n LEFT JOIN companies c ON c.id=n.company_id WHERE n.id=?",
+               (nid,))
+
+
+def save_note(kind, title, body, company_id=None, status="open", due=None, note_id=None):
+    """Create a note, or update it when note_id is given (or when kind+company+title already exist)."""
+    if kind not in NOTE_KINDS:
+        raise ValueError(f"kind must be one of {NOTE_KINDS}")
+    if not note_id:
+        ex = row("SELECT id FROM notes WHERE kind=? AND title=? AND company_id IS ?", (kind, title, company_id))
+        note_id = ex["id"] if ex else None
+    if note_id:
+        execute("UPDATE notes SET kind=?,title=?,body=?,company_id=?,status=?,due=?,updated_at=? WHERE id=?",
+                (kind, title, body, company_id, status, due, now(), note_id))
+        return note_id
+    return execute("INSERT INTO notes(kind,title,body,company_id,status,due,updated_at) VALUES(?,?,?,?,?,?,?)",
+                   (kind, title, body, company_id, status, due, now()))
+
+
+def set_note_status(nid, status):
+    execute("UPDATE notes SET status=?, updated_at=? WHERE id=?", (status, now(), nid))
+
+
+def delete_note(nid):
+    execute("DELETE FROM notes WHERE id=?", (nid,))
+
+
+def note_flags():
+    """{company_id: {"study": n_open, "interview": n}} for the kanban icons."""
+    out = {}
+    for r in rows("SELECT company_id, kind, count(*) n FROM notes WHERE company_id IS NOT NULL "
+                  "AND (kind='interview' OR status!='done') GROUP BY company_id, kind"):
+        out.setdefault(r["company_id"], {})[r["kind"]] = r["n"]
+    return out
 
 
 def stats():

@@ -161,6 +161,21 @@ def save_document(kind, title, content, filename, company_id=None, lang="ja", st
     return f"saved {path.relative_to(HOME).as_posix()}"
 
 
+def list_notes(kind=None, company_id=None, status=None):
+    return _j([{k: n[k] for k in ("id", "kind", "company_id", "company", "title", "status", "due", "updated_at")}
+               for n in store.notes(kind, company_id, status)])
+
+
+def get_note(note_id):
+    n = store.note(note_id)
+    return _j(n) if n else f"note {note_id} not found"
+
+
+def save_note(kind, title, body, company_id=None, status="open", due=None, note_id=None):
+    nid = store.save_note(kind, title, body, company_id, status, due, note_id)
+    return f"saved note #{nid} ({kind}: {title})"
+
+
 def list_documents(company_id=None):
     docs = store.documents(company_id)
     finals = [p.relative_to(HOME).as_posix() for p in FINAL.glob("*.pdf")] if FINAL.exists() else []
@@ -341,6 +356,18 @@ TOOLS = [
         "status": STR, "missing": STRS}, ["kind", "title", "content", "filename"]), save_document),
     ("list_documents", "Registered documents and the ready-to-send PDFs (CVs).", S({"company_id": INT}),
      list_documents),
+    ("list_notes", "List notes. kind: 'study' (things the user must learn/practise, e.g. for a coding test or an "
+     "interview topic), 'interview' (interview prep for one company: Q&A, reverse questions, logistics), 'todo' "
+     "(overall to-do list). Filter by company_id or status (open/done).",
+     S({"kind": {"type": "string", "enum": ["study", "interview", "todo"]}, "company_id": INT, "status": STR}),
+     list_notes),
+    ("get_note", "Read one note in full (markdown).", S({"note_id": INT}, ["note_id"]), get_note),
+    ("save_note", "Create or update a markdown note (same kind+company+title, or note_id, updates it). Link it to a "
+     "company when it is about one. Write interview notes in the interview language (Japanese answers for Japanese "
+     "companies) and never invent experience or numbers.",
+     S({"kind": {"type": "string", "enum": ["study", "interview", "todo"]}, "title": STR, "body": STR,
+        "company_id": INT, "status": {"type": "string", "enum": ["open", "done"]}, "due": STR, "note_id": INT},
+       ["kind", "title", "body"]), save_note),
     ("read_document", "Read a document file (md/txt/docx/pdf) inside the project.", S({"path": STR}, ["path"]),
      read_document),
     ("build_resume", "Regenerate the CV PDFs from the profile scripts. variant: 'all' or a recipe name from owner.json resume_builds.",

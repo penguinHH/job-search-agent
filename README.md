@@ -22,6 +22,10 @@ reads company replies and tracks every application on a kanban board.
 - **GUI** – dashboard & funnel, approvals, kanban pipeline (drag to change stage), company DB with detail
   drawer, inbox matched to companies (incl. HERP / HRMOS / Talentio / jobcan notifications), documents,
   profile / open questions / shared knowledge, settings. UI and agent language: 中文 / 日本語 / English.
+- **Notes** – study notes (coding tests, problem sets, topics to learn), interview notes (prep, predicted Q&A,
+  reverse questions) and a to-do overview. Kanban cards show an icon when a company has open study notes or an
+  interview note; the company drawer renders them. The agent reads and writes them (`list_notes` / `get_note` /
+  `save_note`).
 - **Company data** – scrapers for the Global Brains portfolio, METI J-Startup and the METI university-startup
   DB, website enrichment (careers page, contacts) and A/B (listed/acquired) + type (chem / IT) classification.
 

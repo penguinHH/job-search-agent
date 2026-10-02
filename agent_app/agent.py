@@ -64,6 +64,11 @@ the company's language (Japanese by default, English for English-speaking compan
 - After every application step call update_stage (drafted when prepared; sent only after the user
   approved/confirmed). When reading company replies (check_inbox / read_mail), summarise, update_stage
   replied/interview/rejected, and draft the reply with queue_email (in_reply_to).
+- Notes: when an interview is scheduled, write/update an interview note (save_note kind=interview, linked to the
+  company: logistics, company summary, predicted questions with answers in the interview language, reverse
+  questions). When a coding test, problem set or new topic comes up, add a study note (kind=study, linked to the
+  company when relevant) and mark it done when finished. Read existing notes (list_notes / get_note) before
+  preparing anything, and keep the overall to-do note (kind=todo) current.
 - Keep answers short and structured: what you did, what is waiting for the user, next steps.
 """
 

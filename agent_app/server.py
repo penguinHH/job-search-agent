@@ -136,6 +136,42 @@ def save_file(body: dict = Body(...)):
     return {"ok": True}
 
 
+# ---------------------------------------------------------------- notes (study / interview / todo)
+@app.get("/api/notes")
+def notes(kind: str = "", company_id: int | None = None, status: str = ""):
+    return store.notes(kind or None, company_id, status or None)
+
+
+@app.get("/api/notes/{nid}")
+def get_note(nid: int):
+    n = store.note(nid)
+    if not n:
+        raise HTTPException(404)
+    return n
+
+
+@app.post("/api/notes")
+def save_note(body: dict = Body(...)):
+    try:
+        nid = store.save_note(body["kind"], body["title"], body.get("body", ""), body.get("company_id"),
+                              body.get("status", "open"), body.get("due"), body.get("id"))
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+    return store.note(nid)
+
+
+@app.post("/api/notes/{nid}/status")
+def note_status(nid: int, body: dict = Body(...)):
+    store.set_note_status(nid, body.get("status", "done"))
+    return {"ok": True}
+
+
+@app.delete("/api/notes/{nid}")
+def delete_note(nid: int):
+    store.delete_note(nid)
+    return {"ok": True}
+
+
 # ---------------------------------------------------------------- approval queue
 @app.get("/api/actions")
 def actions(status: str = ""):
