@@ -176,6 +176,10 @@ def company(cid, full=False):
                       (cid,))
     c["actions"] = rows("SELECT id,kind,title,status,created_at FROM actions WHERE company_id=? ORDER BY id DESC", (cid,))
     c["notes"] = notes(company_id=cid)
+    try:
+        c["intel"] = row("SELECT indexed_at, scraped_at FROM intel_meta WHERE company_id=?", (cid,))
+    except sqlite3.OperationalError:
+        c["intel"] = None
     return c
 
 

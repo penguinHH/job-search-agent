@@ -10,3 +10,5 @@ playwright
 keyring
 openai-agents>=0.23
 mcp>=2.2
+fastembed>=0.7
+numpy

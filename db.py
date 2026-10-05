@@ -92,6 +92,7 @@ COMPANY_EXTRA_COLUMNS = {
     "domain": "TEXT",            # normalised website host, used to merge the same company across sources
     "corp_number": "TEXT",       # 法人番号
     "prefecture": "TEXT",
+    "site_description": "TEXT",  # meta description from the last website visit (always refreshed)
     "address": "TEXT",
     "phone": "TEXT",
     "contact_form_url": "TEXT",  # お問い合わせ page on the company's site

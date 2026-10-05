@@ -8,6 +8,7 @@ const I18N = {
     nav_dashboard: "总览", nav_chat: "Agent 对话", nav_approvals: "待审批", nav_pipeline: "进度看板", nav_companies: "公司库",
     nav_notes: "笔记", notesSub: "学习笔记、面试笔记和总的待办清单。agent 和 Claude Code 都会读写这里。", tab_study: "学习笔记", tab_interview: "面试笔记", tab_todo: "待办总览", noteStudy: "学习笔记", noteInterview: "面试笔记", noNotes: "还没有笔记", markDone: "标记完成", reopen: "重新打开", editNote: "编辑", saveNote: "保存", cancel: "取消", newNote: "新建笔记", noteTitle: "标题", noteCompany: "关联公司 ID（可空）", noteDue: "截止（可空）", done: "已完成", openN: "{n} 项未完成", general: "通用", hasStudy: "有学习笔记", hasInterview: "有面试笔记", prepNotes: "让 agent 更新笔记",
     rv_title: "文书审查", rv_running: "审查 agent 检查中…", rv_ok: "审查通过，没有发现问题", rv_n: "{n} 条修改建议", rv_applied: "已应用修改", rv_auto: "已自动修改（可撤销）", rv_failed: "审查失败", rv_dismissed: "已忽略", rv_applySel: "应用所选", rv_applyAll: "全部采用修订版", rv_dismiss: "忽略", rv_revert: "撤销修改", rv_showRevised: "查看修订版全文", rv_run: "让审查 agent 检查", rv_rerun: "重新审查", rv_del: "（删除）", sev_high: "重要", sev_medium: "建议", sev_low: "润色", rv_mode: "文书审查 sub agent", rv_modeSub: "主 agent 写好邮件或文书后，审查 agent 会按日英语法、敬语、文书写作原则和你的档案（防止编造）检查一遍。", rv_mode_off: "关闭", rv_mode_suggest: "提出建议，由我决定", rv_mode_auto: "高度自动：直接修改（保留原文可撤销）", rv_kb: "知识库：agent_app/reviewer_kb/（日语语法与敬语、英语语法、写作原则）；个人规则可写在 资料/reviewer_knowledge.md",
+    in_title: "公司情报库（RAG）", in_sub: "把每家公司的官网、招聘页、评分、进度、邮件、笔记、文书切块后做成向量和关键词索引，agent 用它按意思找公司、回忆已知信息。每 24 小时全量重新抓取官网并更新；某家公司有新进展时，几秒内自动更新它的情报。", in_chunks: "片段", in_companies: "公司", in_dirty: "待更新", in_last: "上次全量更新", in_never: "还没有", in_running: "正在更新…", in_full: "立即全量更新", in_err: "错误", in_search: "用自然语言找公司（中日英都可以），例如：做长期记忆的 AI 公司", in_onlyNew: "只看没联系过的", in_refresh: "刷新情报", in_updated: "情报更新于", in_scraped: "官网抓取于", in_go: "语义搜索", in_none: "没有找到",
     nav_inbox: "收件箱", nav_documents: "文书", nav_profile: "档案与知识", nav_settings: "设置",
     sync: "同步", syncing: "同步中…", synced: "已同步", theme: "主题",
     prov_claude_api: "Claude API", prov_claude_cli: "Claude 订阅（CLI）", prov_openai: "开放模型（NemoClaw 风格）",
@@ -63,6 +64,7 @@ const I18N = {
     nav_dashboard: "ダッシュボード", nav_chat: "エージェント", nav_approvals: "承認待ち", nav_pipeline: "選考ボード", nav_companies: "企業DB",
     nav_notes: "ノート", notesSub: "学習ノート・面接ノート・全体の To Do。エージェントと Claude Code の両方が読み書きします。", tab_study: "学習ノート", tab_interview: "面接ノート", tab_todo: "To Do 一覧", noteStudy: "学習ノート", noteInterview: "面接ノート", noNotes: "ノートはまだありません", markDone: "完了にする", reopen: "未完了に戻す", editNote: "編集", saveNote: "保存", cancel: "キャンセル", newNote: "新規ノート", noteTitle: "タイトル", noteCompany: "関連企業 ID（任意）", noteDue: "期限（任意）", done: "完了", openN: "未完了 {n} 件", general: "共通", hasStudy: "学習ノートあり", hasInterview: "面接ノートあり", prepNotes: "エージェントにノートを更新させる",
     rv_title: "文書レビュー", rv_running: "レビューエージェントが確認中…", rv_ok: "問題は見つかりませんでした", rv_n: "修正提案 {n} 件", rv_applied: "修正を反映済み", rv_auto: "自動で修正済み（元に戻せます）", rv_failed: "レビュー失敗", rv_dismissed: "無視しました", rv_applySel: "選択した提案を反映", rv_applyAll: "修正版をすべて採用", rv_dismiss: "無視", rv_revert: "元に戻す", rv_showRevised: "修正版の全文を表示", rv_run: "レビューエージェントに確認させる", rv_rerun: "再レビュー", rv_del: "（削除）", sev_high: "重要", sev_medium: "提案", sev_low: "推敲", rv_mode: "文書レビュー サブエージェント", rv_modeSub: "メインエージェントがメールや書類を作ると、レビューエージェントが日英文法・敬語・書類作成の原則・プロフィールとの事実整合をチェックします。", rv_mode_off: "オフ", rv_mode_suggest: "提案のみ（反映は自分で決める）", rv_mode_auto: "高度自動：直接修正（元に戻せます）", rv_kb: "知識ベース：agent_app/reviewer_kb/（日本語文法・敬語、英文法、書類の原則）。個人ルールは 資料/reviewer_knowledge.md に。",
+    in_title: "企業インテリジェンス（RAG）", in_sub: "各社のサイト・採用ページ・スコア・進捗・メール・ノート・書類をチャンク化し、ベクトル＋キーワードで索引化。エージェントが意味で企業を探し、既知の情報を思い出すのに使います。24時間ごとに全社サイトを再取得して更新し、進捗があった企業は数秒で自動更新します。", in_chunks: "チャンク", in_companies: "企業", in_dirty: "更新待ち", in_last: "前回の全体更新", in_never: "未実行", in_running: "更新中…", in_full: "今すぐ全体更新", in_err: "エラー", in_search: "自然な言葉で企業を検索（日中英OK）例：長期記憶のAIをつくる会社", in_onlyNew: "未コンタクトのみ", in_refresh: "情報を更新", in_updated: "情報更新", in_scraped: "サイト取得", in_go: "意味検索", in_none: "見つかりませんでした",
     nav_inbox: "受信箱", nav_documents: "書類", nav_profile: "プロフィール", nav_settings: "設定",
     sync: "同期", syncing: "同期中…", synced: "同期しました", theme: "テーマ",
     prov_claude_api: "Claude API", prov_claude_cli: "Claude サブスク（CLI）", prov_openai: "オープンモデル（NemoClaw 風）",
@@ -118,6 +120,7 @@ const I18N = {
     nav_dashboard: "Dashboard", nav_chat: "Agent", nav_approvals: "Approvals", nav_pipeline: "Pipeline", nav_companies: "Companies",
     nav_notes: "Notes", notesSub: "Study notes, interview notes and the overall to-do list. Read and written by the agent and Claude Code.", tab_study: "Study", tab_interview: "Interviews", tab_todo: "To-do overview", noteStudy: "Study notes", noteInterview: "Interview notes", noNotes: "No notes yet", markDone: "Mark done", reopen: "Reopen", editNote: "Edit", saveNote: "Save", cancel: "Cancel", newNote: "New note", noteTitle: "Title", noteCompany: "Company ID (optional)", noteDue: "Due (optional)", done: "Done", openN: "{n} open", general: "General", hasStudy: "Has study notes", hasInterview: "Has interview notes", prepNotes: "Ask the agent to update notes",
     rv_title: "Writing review", rv_running: "Reviewer is checking…", rv_ok: "No issues found", rv_n: "{n} suggestions", rv_applied: "Changes applied", rv_auto: "Auto-corrected (can undo)", rv_failed: "Review failed", rv_dismissed: "Dismissed", rv_applySel: "Apply selected", rv_applyAll: "Use revised version", rv_dismiss: "Dismiss", rv_revert: "Undo", rv_showRevised: "Show full revised text", rv_run: "Ask the reviewer", rv_rerun: "Review again", rv_del: "(delete)", sev_high: "Important", sev_medium: "Suggestion", sev_low: "Polish", rv_mode: "Writing reviewer sub-agent", rv_modeSub: "After the main agent writes an e-mail or document, the reviewer checks Japanese/English grammar, keigo, writing principles and facts against your profile.", rv_mode_off: "Off", rv_mode_suggest: "Suggest – I decide", rv_mode_auto: "Highly automatic – apply directly (original kept for undo)", rv_kb: "Knowledge base: agent_app/reviewer_kb/ (Japanese grammar & keigo, English grammar, writing principles); personal rules in 资料/reviewer_knowledge.md",
+    in_title: "Company intelligence (RAG)", in_sub: "Each company's website, careers page, score, pipeline, mails, notes and documents are chunked and indexed (vectors + keywords). The agent uses it to find companies by meaning and to recall what is known. Every 24 h all websites are re-scraped and the index updated; a company with new progress is refreshed within seconds.", in_chunks: "chunks", in_companies: "companies", in_dirty: "pending", in_last: "Last full update", in_never: "never", in_running: "updating…", in_full: "Full update now", in_err: "Error", in_search: "Find companies in plain words (any language), e.g. AI companies building long-term memory", in_onlyNew: "Not contacted only", in_refresh: "Refresh intel", in_updated: "Intel updated", in_scraped: "Site scraped", in_go: "Semantic search", in_none: "Nothing found",
     nav_inbox: "Inbox", nav_documents: "Documents", nav_profile: "Profile & notes", nav_settings: "Settings",
     sync: "Sync", syncing: "Syncing…", synced: "Synced", theme: "Theme",
     prov_claude_api: "Claude API", prov_claude_cli: "Claude subscription (CLI)", prov_openai: "Open models (NemoClaw-style)",
@@ -606,6 +609,22 @@ pages.companies = async (main) => {
     h("button", { class: "btn primary", onclick: () => { CF.offset = 0; load(); } }, T("search")), count,
     h("button", { class: "btn", style: "margin-left:auto", onclick: () => askAgent(`Company DB filter: type=${type.value || "all"}, ${applied.value === "no" ? "not contacted" : "any status"}, keywords=${q.value || "none"}. Pick the 10 best fits for me, check their careers pages, score and rank them.`) }, icon("spark"), T("evalThese"))), result);
   q.addEventListener("keydown", (e) => { if (e.key === "Enter") { CF.offset = 0; load(); } });
+  const sq = h("input", { class: "input", placeholder: T("in_search"), style: "flex:1;min-width:320px" });
+  const onlyNew = h("input", { type: "checkbox" });
+  const semBox = h("div");
+  const runSem = async () => {
+    if (!sq.value.trim()) { semBox.innerHTML = ""; return; }
+    semBox.innerHTML = ""; semBox.append(h("div", { class: "muted small", style: "padding:8px 0" }, h("span", { class: "spin" })));
+    const r = await api(`/api/intel/search?k=12&q=${encodeURIComponent(sq.value)}${onlyNew.checked ? "&contacted=no" : ""}`);
+    const by = new Map(); for (const x of r.hits) { if (!by.has(x.company_id)) by.set(x.company_id, { name: x.company, hits: [] }); by.get(x.company_id).hits.push(x); }
+    semBox.innerHTML = "";
+    semBox.append(h("div", { class: "card", style: "padding:0;margin-bottom:14px" }, by.size ? [...by.entries()].map(([cid, g]) =>
+      h("div", { class: "li click", style: "padding:10px 14px;align-items:flex-start", onclick: () => openCompany(cid) },
+        h("div", { class: "grow" }, h("b", {}, g.name), ...g.hits.map((x) => h("div", { class: "muted small", style: "margin-top:2px" }, h("span", { class: "badge" }, x.section), " ", x.text.replace(/^\[[^\]]*\]\s*/, "").slice(0, 160)))))) :
+      h("div", { class: "empty" }, T("in_none"))));
+  };
+  sq.addEventListener("keydown", (e) => { if (e.key === "Enter") runSem(); });
+  result.before(h("div", { class: "row", style: "margin-bottom:10px" }, sq, h("label", { class: "row small muted", style: "gap:4px" }, onlyNew, T("in_onlyNew")), h("button", { class: "btn", onclick: runSem }, icon("spark"), T("in_go"))), semBox);
   async function load() {
     Object.assign(CF, { q: q.value, type: type.value, applied: applied.value, prefecture: pref.value, min_score: minScore.value, order: order.value });
     const params = new URLSearchParams({ q: q.value, type: type.value, applied: applied.value, prefecture: pref.value, order: order.value, limit: 100, offset: CF.offset });
@@ -664,7 +683,8 @@ async function openCompany(id) {
     h("div", { class: "row" },
       h("button", { class: "btn primary", onclick: () => { close(); askAgent(`Research #${c.id} ${c.name}: check the careers page and recent news, evaluate fit, score it, and tell me which role to apply for and through which channel.`); } }, icon("spark"), T("research")),
       h("button", { class: "btn", onclick: () => { close(); askAgent(`Prepare an application to #${c.id} ${c.name}: confirm the role and channel, write the application text in the company's language (email → approval queue; web form → fill it in the browser and wait for my approval before submitting).`); } }, icon("send"), T("apply")),
-      h("button", { class: "btn", onclick: async (e) => { e.currentTarget.disabled = true; await api(`/api/companies/${c.id}/enrich`, { method: "POST" }); close(); openCompany(c.id); } }, icon("sync"), T("rescrape"))),
+      h("button", { class: "btn", onclick: async (e) => { e.currentTarget.disabled = true; e.currentTarget.lastChild.textContent = T("in_running"); await api(`/api/intel/company/${c.id}`, { method: "POST" }); close(); openCompany(c.id); } }, icon("sync"), h("span", {}, T("in_refresh"))),
+      c.intel ? h("span", { class: "muted small" }, `${T("in_updated")} ${(c.intel.indexed_at || "—").slice(5, 16)} · ${T("in_scraped")} ${(c.intel.scraped_at || "—").slice(5, 16)}`) : null),
     ...companyNotes(c, close),
     m ? h("div", { class: "section card" }, h("h2", {}, `${T("fitTitle")} · ${m.score}`), h("div", {}, h("b", {}, T("fitRoles")), list(m.fit_roles).join(" / ")),
       h("ul", {}, list(m.reasons).map((r) => h("li", {}, r))), list(m.concerns).length ? h("div", { class: "muted" }, T("concerns") + list(m.concerns).join("; ")) : null) : null,
@@ -865,6 +885,25 @@ pages.settings = async (main) => {
     h("div", { class: "row" }, h("span", { class: "muted small grow" }, T("oaNote")), h("button", { class: "btn primary", onclick: async () => { await api("/api/settings/agent", { method: "POST", body: { openai: { preset: preset.value, base_url: base.value.trim(), model: model.value.trim() }, openai_key: oakey.value } }); toast(T("saved")); route(); } }, T("save"))));
   const rvMode = h("div", { class: "row", style: "gap:8px;flex-wrap:wrap" }, ["off", "suggest", "auto"].map((m) => h("label", { class: "provcard" + (s.review_mode === m ? " on" : ""), style: "flex:1;min-width:200px;cursor:pointer" },
     h("input", { type: "radio", name: "rvmode", checked: s.review_mode === m, onchange: async () => { await api("/api/settings/agent", { method: "POST", body: { review_mode: m } }); toast(T("saved")); route(); } }), " ", h("b", {}, T("rv_mode_" + m)))));
+  const inCard = h("div", { class: "card", style: "margin-bottom:16px" });
+  async function renderIntel() {
+    const st = await api("/api/intel/status");
+    inCard.innerHTML = "";
+    inCard.append(h("h2", {}, icon("companies"), T("in_title")), h("div", { class: "muted", style: "margin:-6px 0 12px" }, T("in_sub")),
+      h("div", { class: "row", style: "gap:18px" },
+        h("div", {}, h("div", { class: "muted small" }, T("in_companies")), h("b", {}, st.companies)),
+        h("div", {}, h("div", { class: "muted small" }, T("in_chunks")), h("b", {}, st.chunks)),
+        h("div", {}, h("div", { class: "muted small" }, T("in_dirty")), h("b", {}, st.dirty)),
+        h("div", {}, h("div", { class: "muted small" }, T("in_last")), h("b", {}, st.last_full ? st.last_full.slice(0, 16) : T("in_never"))),
+        h("span", { style: "margin-left:auto" }),
+        st.running ? h("span", { class: "muted small" }, h("span", { class: "spin" }), " ", T("in_running"), " ", st.progress || "") :
+          h("button", { class: "btn sm", onclick: async () => { try { await api("/api/intel/full", { method: "POST" }); toast(T("in_running")); } catch (e) { toast(e.message, 5000); } renderIntel(); } }, icon("sync"), T("in_full"))),
+      ...(st.last_error ? [h("div", { class: "errbox" }, T("in_err") + ": " + st.last_error)] : []),
+      h("div", { class: "muted small mono", style: "margin-top:8px" }, st.model));
+    if (st.running) setTimeout(() => { if (inCard.isConnected) renderIntel(); }, 5000);
+  }
+  renderIntel();
+  page.append(inCard);
   page.append(h("div", { class: "card", style: "margin-bottom:16px" }, h("h2", {}, icon("check"), T("rv_mode")), h("div", { class: "muted", style: "margin:-6px 0 12px" }, T("rv_modeSub")), rvMode, h("div", { class: "muted small", style: "margin-top:8px" }, T("rv_kb"))));
   page.append(h("div", { class: "card" }, h("h2", {}, icon("spark"), T("backend")), h("div", { class: "muted", style: "margin:-6px 0 12px" }, T("backendSub")),
     h("div", { class: "grid cols-3" }, provCard("claude_api", apiBody), provCard("claude_cli", cliBody), provCard("openai", oaBody))));

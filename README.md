@@ -28,6 +28,11 @@ reads company replies and tracks every application on a kanban board.
   grammar, writing principles for e-mails / 履歴書 / CVs / cover letters / form answers) and a fact check against the
   profile. Mode in Settings: off / suggest (you pick which suggestions to apply) / auto (applied directly, undoable).
   The agent can also call `review_text` before filling web forms.
+- **Company intelligence (RAG)** – `agent_app/intel.py`: every company's website, careers page, score, pipeline,
+  mails, notes and documents are chunked and indexed with a local multilingual embedding model (fastembed, no API
+  key) plus an SQLite FTS5 trigram index; hybrid search via the `search_intel` tool and the Companies page. Every 24 h
+  all websites are re-scraped and the index refreshed; SQLite triggers re-index a company within seconds of new
+  progress (also when the change comes from `jobdb.py`). CLI: `python -m agent_app.intel status|search|rebuild|daily`.
 - **Shared rules** – `agent_app/kb/` (outreach rules, fit-scoring rubric) is loaded into every agent conversation
   and used by Claude Code sessions too; personal rules and scoring anchors stay in the data folder's `knowledge.md`.
 - **Notes** – study notes (coding tests, problem sets, topics to learn), interview notes (prep, predicted Q&A,

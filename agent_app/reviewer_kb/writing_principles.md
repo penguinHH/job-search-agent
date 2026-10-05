@@ -48,7 +48,12 @@ These apply to every language. The reviewer checks them in addition to grammar.
 - 1 minute ≈ 300 Japanese characters / 130–150 English words.
 - Start with the conclusion. Use 「御社」 (spoken). Prepare honest answers for gaps ("未経験ですが、〜が活きると考え、〜で学んでいます").
 
-## 7. Severity guide
+## 7. SNS / chat messages (LinkedIn, Wantedly, DMs)
+- A different genre from e-mail: short (3–8 lines), conclusion first, light です・ます, mirrors the counterpart.
+- Do NOT add 宛名 blocks, 「お世話になっております」, 「何卒よろしくお願い申し上げます」 or a signature; flag them as
+  `structure` issues if present. Do not push e-mail-level formality onto chat messages.
+
+## 8. Severity guide
 - high: wrong facts / fabricated claims, wrong company or person name, broken keigo toward the reader (e.g. 謙譲語 for the reader's actions), placeholders, confidential info, missing required element (attachment mentioned but not attached, no signature).
 - medium: unnatural grammar, inconsistent style, too long, generic content, weak structure.
 - low: wording polish, punctuation, minor consistency.

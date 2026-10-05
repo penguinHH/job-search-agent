@@ -197,6 +197,18 @@ def save_note(kind, title, body, company_id=None, status="open", due=None, note_
     return f"saved note #{nid} ({kind}: {title})"
 
 
+def search_intel(query, k=8, company_id=None, contacted=None):
+    from . import intel
+    return _j(intel.search(query, min(int(k or 8), 20), company_id, contacted))
+
+
+def refresh_intel(company_id):
+    from . import intel
+    ok = intel.scrape([company_id])
+    n = intel.index_company(company_id, force=True)
+    return f"re-scraped website ({'ok' if ok else 'failed - kept previous data'}) and re-indexed {n} chunks"
+
+
 def list_documents(company_id=None):
     docs = store.documents(company_id)
     finals = [p.relative_to(HOME).as_posix() for p in FINAL.glob("*.pdf")] if FINAL.exists() else []
@@ -382,11 +394,18 @@ TOOLS = [
     ("review_text", "Ask the reviewer sub-agent (Japanese/English grammar, keigo, writing principles, fact check "
      "against the profile) to check a short text such as an application-form answer or interview answer BEFORE you "
      "type it into a form. E-mails (queue_email) and documents (save_document) are reviewed automatically.",
-     S({"text": STR, "doc_kind": {"type": "string", "enum": ["form_answer", "cover_letter", "email", "cv", "rirekisho",
-        "interview", "other"]}, "lang": {"type": "string", "enum": ["ja", "en", "mixed"]}, "company_id": INT,
+     S({"text": STR, "doc_kind": {"type": "string", "enum": ["form_answer", "cover_letter", "email", "sns_message", "cv",
+        "rirekisho", "interview", "other"]}, "lang": {"type": "string", "enum": ["ja", "en", "mixed"]}, "company_id": INT,
         "purpose": STR}, ["text"]), review_text),
     ("get_review", "Read the reviewer sub-agent's result for an e-mail action, a document or a review id.",
      S({"review_id": INT, "action_id": INT, "document_path": STR}), get_review),
+    ("search_intel", "Semantic + keyword search over the company intelligence index (RAG): latest website text, "
+     "careers pages, fit notes, pipeline history, mails, notes and documents of every company, in any language "
+     "(e.g. 'AI companions with long-term memory', '量子化学 受託', '面接で聞かれたこと'). contacted=false → only companies "
+     "not contacted yet. Use it to find companies by meaning and to recall what we know about one (company_id).",
+     S({"query": STR, "k": INT, "company_id": INT, "contacted": BOOL}, ["query"]), search_intel),
+    ("refresh_intel", "Re-scrape one company's website now and re-index its intelligence (use before writing to a "
+     "company if its information may be stale).", S({"company_id": INT}, ["company_id"]), refresh_intel),
     ("list_notes", "List notes. kind: 'study' (things the user must learn/practise, e.g. for a coding test or an "
      "interview topic), 'interview' (interview prep for one company: Q&A, reverse questions, logistics), 'todo' "
      "(overall to-do list). Filter by company_id or status (open/done).",

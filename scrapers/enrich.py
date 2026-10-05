@@ -105,6 +105,7 @@ def enrich_one(row) -> dict:
             "meta", attrs={"property": "og:description"})
         out["title"] = soup.title.get_text(strip=True)[:300] if soup.title else None
         out["description"] = meta.get("content", "").strip()[:1000] if meta else None
+        out["site_description"] = out["description"]
         careers = find_careers_link(soup, final_url)
         contact = find_contact_link(soup, final_url)
         emails = emails_in(html)
@@ -155,7 +156,7 @@ def main():
     rows = conn.execute(sql, params).fetchall()
     print(f"Enriching {len(rows)} companies ...")
 
-    cols = ["title", "description", "homepage_text", "careers_url", "careers_text",
+    cols = ["title", "description", "site_description", "homepage_text", "careers_url", "careers_text",
             "contact_emails", "contact_form_url", "phone", "enriched_at", "enrich_error"]
     existing = {r["id"]: r for r in rows}
     done = 0
