@@ -1,0 +1,199 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 1300" font-family="Microsoft YaHei, Yu Gothic, sans-serif" font-size="13">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#555"/></marker>
+    <marker id="arR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c62828"/></marker>
+    <marker id="arG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#2e7d32"/></marker>
+    <style>
+      .t{font-weight:bold;font-size:15px}
+      .h{font-weight:bold;font-size:13.5px}
+      .s{font-size:11.5px;fill:#333}
+      .m{font-family:Consolas,monospace;font-size:11px;fill:#333}
+      .lab{font-size:11px;fill:#555}
+      .layer{font-weight:bold;font-size:12px;fill:#888}
+    </style>
+  </defs>
+  <rect width="1680" height="1300" fill="#fff"/>
+  <text x="840" y="34" text-anchor="middle" font-size="22" font-weight="bold">求职 AI Agent 详细架构图</text>
+  <text x="840" y="56" text-anchor="middle" class="s">python -m agent_app → uvicorn（仅 127.0.0.1:8765）· 约 4,800 行 Python · 代码与个人数据分离（资料/ = HOME）</text>
+
+  <!-- ================= Layer 1: users ================= -->
+  <text x="20" y="92" class="layer">① 用户层</text>
+  <rect x="20" y="100" width="420" height="120" rx="10" fill="#eef2f7" stroke="#1f4e8c" stroke-width="1.5"/>
+  <text x="230" y="124" text-anchor="middle" class="t">浏览器 GUI（agent_app/static）</text>
+  <text x="36" y="148" class="s">· 聊天（中 / 日 / 英）· 公司库 · Pipeline 看板 · 笔记</text>
+  <text x="36" y="168" class="s">· 审批队列：批准 / 驳回发信与表单提交</text>
+  <text x="36" y="188" class="s">· 收件箱 · 审稿结果（apply / revert）· 设置（后端、密码）</text>
+  <text x="36" y="208" class="s">· fetch + getReader() 逐段读取流式响应</text>
+
+  <rect x="470" y="100" width="380" height="120" rx="10" fill="#f5f5f5" stroke="#777" stroke-dasharray="5 3"/>
+  <text x="660" y="124" text-anchor="middle" class="t">Claude Code 会话（另一入口）</text>
+  <text x="486" y="148" class="s">· skill：japan-job-search / sns-messaging</text>
+  <text x="486" y="168" class="s">· jobdb.py：无 LLM 的命令行（查公司、写分数、跟踪进度）</text>
+  <text x="486" y="188" class="s">· send_mail.py：一次发一封（--confirm 才真正发送）</text>
+  <text x="486" y="208" class="s">· 与 GUI 共享同一个 SQLite 和 kb/ 规则</text>
+
+  <!-- ================= Layer 2: server ================= -->
+  <text x="20" y="252" class="layer">② 服务层</text>
+  <rect x="20" y="260" width="830" height="150" rx="10" fill="#eef2f7" stroke="#1f4e8c" stroke-width="1.5"/>
+  <text x="435" y="284" text-anchor="middle" class="t">FastAPI 服务器（server.py）</text>
+  <text x="36" y="310" class="m">POST /api/chats/{cid}/send  → StreamingResponse(text/event-stream, "data: {json}\n\n")</text>
+  <text x="36" y="330" class="m">POST /api/chats/{cid}/stop   · /api/actions/{aid}/approve|reject   · /api/inbox/fetch</text>
+  <text x="36" y="350" class="m">/api/companies · /api/pipeline · /api/profile · /api/questions · /api/documents · /api/notes</text>
+  <text x="36" y="370" class="m">/api/intel/search|full|company/{cid} · /api/reviews/* · /api/settings/* · /api/sync</text>
+  <text x="36" y="390" class="m">POST /api/tool/{name}  ← MCP 服务器回调到 GUI 进程执行工具</text>
+  <line x1="230" y1="220" x2="230" y2="258" stroke="#555" marker-end="url(#ar)"/>
+  <text x="238" y="244" class="lab">HTTP / 流式事件</text>
+
+  <!-- ================= Layer 3: agent ================= -->
+  <text x="20" y="442" class="layer">③ Agent 层</text>
+  <rect x="20" y="450" width="830" height="250" rx="10" fill="#fff7e6" stroke="#c77700" stroke-width="1.5"/>
+  <text x="435" y="474" text-anchor="middle" class="t">agent.run(chat_id, text, stop_flag) —— 生成器，统一事件协议</text>
+  <text x="435" y="494" text-anchor="middle" class="m">text · thinking · tool_use · tool_result · turn_end · error · done</text>
+
+  <rect x="36" y="508" width="250" height="110" rx="8" fill="#fff" stroke="#c77700"/>
+  <text x="161" y="530" text-anchor="middle" class="h">① claude_api</text>
+  <text x="48" y="552" class="s">Anthropic SDK 流式工具循环（自写）</text>
+  <text x="48" y="572" class="s">+ 服务端 web_search 工具</text>
+  <text x="48" y="592" class="s">按 API 计费</text>
+
+  <rect x="300" y="508" width="250" height="110" rx="8" fill="#fff" stroke="#c77700"/>
+  <text x="425" y="530" text-anchor="middle" class="h">② claude_cli</text>
+  <text x="312" y="552" class="s">子进程 claude -p</text>
+  <text x="312" y="572" class="s">--append-system-prompt-file</text>
+  <text x="312" y="592" class="s">工具经 mcp_server.py（stdio）暴露</text>
+  <text x="312" y="610" class="s">用订阅额度</text>
+
+  <rect x="564" y="508" width="270" height="110" rx="8" fill="#fff" stroke="#c77700"/>
+  <text x="699" y="530" text-anchor="middle" class="h">③ openai（oa_runner.py）</text>
+  <text x="576" y="552" class="s">OpenAI Agents SDK Runner</text>
+  <text x="576" y="572" class="s">DeepSeek / NIM / OpenRouter / Ollama</text>
+  <text x="576" y="592" class="s">strict_json_schema=False</text>
+  <text x="576" y="610" class="s">search_web（DuckDuckGo）代替搜索</text>
+
+  <rect x="36" y="630" width="798" height="58" rx="8" fill="#fffdf5" stroke="#c77700" stroke-dasharray="4 3"/>
+  <text x="48" y="652" class="h">system_text()</text>
+  <text x="150" y="652" class="s">= SYSTEM_RULES + kb/outreach.md + kb/scoring.md + 资料/knowledge.md + profile.md</text>
+  <text x="150" y="674" class="s">+ 当前时间 + pipeline 统计（三个后端共用；→ agent_system_prompt.md 供 CLI 使用）</text>
+  <line x1="435" y1="410" x2="435" y2="448" stroke="#555" marker-end="url(#ar)"/>
+
+  <!-- MCP loop -->
+  <rect x="870" y="508" width="200" height="110" rx="8" fill="#fff" stroke="#888"/>
+  <text x="970" y="530" text-anchor="middle" class="h">mcp_server.py</text>
+  <text x="882" y="552" class="s">把 TOOL_SCHEMAS 以 MCP</text>
+  <text x="882" y="572" class="s">（stdio）提供给 claude -p</text>
+  <text x="882" y="592" class="s">调用时 HTTP POST 回</text>
+  <text x="882" y="610" class="s">/api/tool/{name}</text>
+  <path d="M425,618 L425,624 L852,624 L852,600 L868,600" fill="none" stroke="#555" marker-end="url(#ar)"/>
+  <path d="M970,508 L970,400 L852,400" fill="none" stroke="#555" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+  <text x="978" y="460" class="lab">回调 GUI 进程</text>
+
+  <!-- ================= Layer 4: tools ================= -->
+  <text x="20" y="732" class="layer">④ 工具层</text>
+  <rect x="20" y="740" width="1050" height="200" rx="10" fill="#eef7ee" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="545" y="764" text-anchor="middle" class="t">tools.TOOLS —— 唯一的工具定义表（35 个）→ TOOL_SCHEMAS / run_tool(name, args)</text>
+  <g class="s">
+    <text x="36" y="792"><tspan class="h">公司</tspan>  search_companies · get_company · add_company · enrich_company · score_company</text>
+    <text x="36" y="814"><tspan class="h">进度</tspan>  update_stage · get_pipeline        <tspan class="h">档案/问答</tspan>  get_profile · edit_profile · list_questions · ask_user · record_answer</text>
+    <text x="36" y="836"><tspan class="h">文书</tspan>  save_document · list_documents · read_document · build_resume · review_text · get_review</text>
+    <text x="36" y="858"><tspan class="h">情报</tspan>  search_intel · refresh_intel        <tspan class="h">笔记</tspan>  list_notes · get_note · save_note        <tspan class="h">网络</tspan>  fetch_url · search_web</text>
+    <text x="36" y="880"><tspan class="h">邮件</tspan>  queue_email · list_actions · check_inbox · read_mail · link_mail</text>
+    <text x="36" y="902"><tspan class="h">浏览器</tspan>  browser_open · browser_read · browser_fill · browser_select · browser_check · browser_upload · browser_click</text>
+    <text x="36" y="926" fill="#c62828">★ queue_email 与「提交类」browser_click 不直接执行 → 改写为写入 actions 审批队列</text>
+  </g>
+  <line x1="435" y1="700" x2="435" y2="738" stroke="#555" marker-end="url(#ar)"/>
+
+  <!-- ================= Safety column ================= -->
+  <text x="1100" y="442" class="layer">⑤ 安全与审查</text>
+  <rect x="1100" y="450" width="270" height="170" rx="10" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="1235" y="474" text-anchor="middle" class="t">actions 审批队列</text>
+  <text x="1114" y="498" class="s">发信、表单提交只入队，不执行</text>
+  <text x="1114" y="518" class="s">GUI 批准 → server.approve()</text>
+  <text x="1114" y="538" class="s">    → mailer.send / browser.click</text>
+  <text x="1114" y="558" class="s">auto 模式下审稿未完成 → 409</text>
+  <text x="1114" y="578" class="s">验证码、登录、密码一律交给本人</text>
+  <text x="1114" y="604" class="s" fill="#c62828">安全边界在代码里，不靠提示词</text>
+
+  <rect x="1390" y="450" width="270" height="170" rx="10" fill="#f3e8fd" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="1525" y="474" text-anchor="middle" class="t">审稿 sub-agent（reviewer.py）</text>
+  <text x="1404" y="498" class="s">reviewer.start()：save_document /</text>
+  <text x="1404" y="518" class="s">  queue_email 后在后台线程审稿</text>
+  <text x="1404" y="538" class="s">review_text：阻塞式（表单答案等）</text>
+  <text x="1404" y="558" class="s">检查：语法 · 敬语 · 文书惯例 ·</text>
+  <text x="1404" y="578" class="s">  与 profile 的事实一致性</text>
+  <text x="1404" y="604" class="s">规则：reviewer_kb/ · 同一后端执行</text>
+  <path d="M1070,925 L1085,925 L1085,540 L1098,540" fill="none" stroke="#c62828" stroke-width="1.5" marker-end="url(#arR)"/>
+  <text x="1074" y="915" class="lab" fill="#c62828">入队</text>
+  <path d="M1070,836 L1380,836 L1380,535 L1388,535" fill="none" stroke="#6a1b9a" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+  <text x="1290" y="828" class="lab" fill="#6a1b9a">触发审稿</text>
+
+  <!-- executors -->
+  <text x="1100" y="652" class="layer">⑥ 对外执行</text>
+  <rect x="1100" y="660" width="270" height="100" rx="10" fill="#fff" stroke="#555"/>
+  <text x="1235" y="684" text-anchor="middle" class="t">mailer.py</text>
+  <text x="1114" y="706" class="s">SMTP（STARTTLS）发信</text>
+  <text x="1114" y="726" class="s">IMAP over SSL 收信 → inbox 表</text>
+  <text x="1114" y="746" class="s">密码在 keyring；无密码时显式报错</text>
+  <rect x="1390" y="660" width="270" height="100" rx="10" fill="#fff" stroke="#555"/>
+  <text x="1525" y="684" text-anchor="middle" class="t">browser.py</text>
+  <text x="1404" y="706" class="s">Playwright 同步 API</text>
+  <text x="1404" y="726" class="s">可见的 Chrome 窗口</text>
+  <text x="1404" y="746" class="s">所有调用经队列交给同一线程</text>
+  <line x1="1235" y1="620" x2="1235" y2="658" stroke="#c62828" marker-end="url(#arR)"/>
+  <line x1="1370" y1="600" x2="1440" y2="658" stroke="#c62828" marker-end="url(#arR)"/>
+  <text x="1300" y="648" class="lab" fill="#c62828">批准后</text>
+
+  <!-- ================= Layer 7: data ================= -->
+  <text x="20" y="972" class="layer">⑦ 数据层</text>
+  <rect x="20" y="980" width="650" height="200" rx="10" fill="#eef2f7" stroke="#1f4e8c" stroke-width="1.5"/>
+  <text x="345" y="1004" text-anchor="middle" class="t">SQLite：资料/data/jobsearch.db（唯一事实来源）</text>
+  <text x="36" y="1030" class="h">db.py</text>
+  <text x="90" y="1030" class="m">companies · profile_docs · profile_summary · matches</text>
+  <text x="90" y="1048" class="m">documents · open_items · outreach（8 阶段 pipeline）</text>
+  <text x="36" y="1074" class="h">store.py</text>
+  <text x="110" y="1074" class="m">actions · inbox · chats · settings · notes（每线程一个连接）</text>
+  <text x="36" y="1100" class="h">intel.py</text>
+  <text x="110" y="1100" class="m">intel_chunks · intel_meta · intel_dirty · intel_fts(FTS5 trigram)</text>
+  <text x="36" y="1128" class="h" fill="#2e7d32">触发器</text>
+  <text x="96" y="1128" class="s">outreach / inbox / matches / notes / documents 的 INSERT，</text>
+  <text x="96" y="1148" class="s">及 companies 等字段的 UPDATE → 写入 intel_dirty（原因：progress / score / note / document / scraped）</text>
+  <text x="36" y="1170" class="lab">个人数据：资料/profile/profile.md · knowledge.md · owner.json · outbox/（文书、PDF）</text>
+  <line x1="545" y1="940" x2="420" y2="978" stroke="#555" marker-end="url(#ar)"/>
+  <text x="490" y="962" class="lab">读写</text>
+
+  <!-- RAG -->
+  <rect x="700" y="980" width="370" height="200" rx="10" fill="#eef7ee" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="885" y="1004" text-anchor="middle" class="t">混合 RAG（intel.py）</text>
+  <text x="714" y="1028" class="s">切块 320 字 / 重叠 60，块头「[公司 | 段落]」，sha1 未变则跳过</text>
+  <text x="714" y="1050" class="s">向量：fastembed MiniLM-L12（384 维，numpy 全量）</text>
+  <text x="714" y="1072" class="s">关键词：FTS5 trigram，bm25 排序</text>
+  <text x="714" y="1094" class="s">各取 top200 → RRF：score += 1/(60+rank)</text>
+  <text x="714" y="1116" class="s">每家最多 2 块、最多 8 家 → 返回给 agent</text>
+  <text x="714" y="1138" class="s">后台 worker：每 20 s 处理 intel_dirty；</text>
+  <text x="714" y="1158" class="s">  新进度且 6 h 内未抓 → 重抓官网；每 24 h 全量（12 线程）</text>
+  <line x1="670" y1="1120" x2="698" y2="1120" stroke="#2e7d32" marker-end="url(#arG)"/>
+  <path d="M885,980 L885,950 L760,950 L760,942" fill="none" stroke="#2e7d32" marker-end="url(#arG)"/>
+  <text x="890" y="966" class="lab" fill="#2e7d32">search_intel</text>
+
+  <!-- ================= Layer 8: offline pipeline ================= -->
+  <text x="1100" y="972" class="layer">⑧ 离线数据管线（CLI）</text>
+  <rect x="1100" y="980" width="560" height="200" rx="10" fill="#fff" stroke="#888" stroke-dasharray="5 3"/>
+  <text x="1380" y="1004" text-anchor="middle" class="t">爬虫 → 补全 → 分类 → 匹配</text>
+  <text x="1114" y="1030" class="s">scrapers/globalbrains.py（Nuxt 内嵌 JSON）· jstartup.py（列表页+详情页，8 线程）</text>
+  <text x="1114" y="1050" class="s">scrapers/meti_univ.py（METI Excel，校验 PK 头）</text>
+  <text x="1114" y="1072" class="s">common.upsert_company：法人番号 → 域名 → 规范化公司名 去重合并</text>
+  <text x="1114" y="1094" class="s">enrich.py：访问官网（12 线程）→ 标题/简介/招聘页/邮箱/电话/正文</text>
+  <text x="1114" y="1116" class="s">classify.py：规则打标签（A/B、化学材料 / IT），--prune</text>
+  <text x="1114" y="1138" class="s">build_profile.py：材料 → Claude 归纳 → profile_summary</text>
+  <text x="1114" y="1160" class="s">match.py：关键词粗排 → Claude 给 top-N 打 0–100 分 → matches</text>
+  <line x1="1100" y1="1080" x2="672" y2="1080" stroke="#555" marker-end="url(#ar)"/>
+  <text x="900" y="1074" class="lab"></text>
+
+  <!-- legend -->
+  <rect x="20" y="1210" width="1640" height="70" rx="8" fill="#fafafa" stroke="#ddd"/>
+  <text x="36" y="1236" class="h">图例</text>
+  <line x1="90" y1="1232" x2="130" y2="1232" stroke="#555" marker-end="url(#ar)"/><text x="138" y="1236" class="s">调用 / 数据流</text>
+  <line x1="250" y1="1232" x2="290" y2="1232" stroke="#c62828" marker-end="url(#arR)"/><text x="298" y="1236" class="s">不可逆动作（需人工批准）</text>
+  <line x1="480" y1="1232" x2="520" y2="1232" stroke="#2e7d32" marker-end="url(#arG)"/><text x="528" y="1236" class="s">RAG 检索与索引更新</text>
+  <rect x="680" y="1222" width="36" height="18" fill="#fff" stroke="#888" stroke-dasharray="5 3"/><text x="724" y="1236" class="s">离线或另一入口（不在 GUI 进程内）</text>
+  <text x="36" y="1264" class="s">已知改进点：MiniLM 128 token 截断 · intel_dirty 先删后处理会丢更新 · 向量全量计算 · 系统提示末尾分钟级时间使 prompt cache 失效 · MCP 超时可能重复执行工具 · 服务器无鉴权</text>
+</svg>
