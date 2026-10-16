@@ -51,6 +51,7 @@ agent_app/      GUI + agent (FastAPI backend, single-page frontend in static/)
 scrapers/       company sources + website enrichment
 classify.py     A/B and type classification       jobdb.py   CLI for the database
 send_mail.py    stand-alone mail sender           config.py  paths (code vs. personal data)
+skills/         Claude Code skills (job-search workflow, SNS message style)
 资料.example/    template for your personal data folder
 ```
 Everything personal – database, profile, CVs, mails, browser login – lives in a separate data folder
@@ -68,6 +69,14 @@ In **Settings** choose a back-end (Claude CLI needs Claude Code installed and lo
 key) and add a Gmail **app password** per mail account. Keys and passwords are stored in the OS credential store
 (keyring), never in files. CV PDF export uses Microsoft Word (Windows COM); CV generator scripts are yours and are
 referenced from `owner.json` → `resume_builds`.
+
+### Claude Code skills
+`skills/` holds two skills for using the same database from Claude Code: `japan-job-search` (ranking, research,
+drafting, pipeline updates) and `sns-messaging` (tone and format for LinkedIn / Wantedly / DM replies). Copy them
+into `.claude/skills/` to enable them; your personal rules stay in `资料/knowledge.md` and the profile.
+```bash
+mkdir -p .claude/skills && cp -r skills/* .claude/skills/
+```
 
 ## Requirements
 Python 3.11+, Google Chrome (for the form assistant), Windows recommended (Word PDF export).
