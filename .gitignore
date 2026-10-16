@@ -1,5 +1,6 @@
 # personal data folder (database, profile, CVs, mails, browser login) – never commit
 资料/
+accounts/
 /data/
 /outbox/
 /profile/

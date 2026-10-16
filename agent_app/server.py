@@ -1,5 +1,6 @@
 """FastAPI backend for the GUI."""
 import json
+import os
 import threading
 from pathlib import Path
 
@@ -408,6 +409,28 @@ def stop(cid: int):
     return {"ok": True}
 
 
+# ---------------------------------------------------------------- account (one process per account)
+@app.get("/api/whoami")
+def whoami():
+    return {"account": os.environ.get("JOBAGENT_ACCOUNT", "default"),
+            "can_switch": os.environ.get("JOBAGENT_SUPERVISED") == "1"}
+
+
+@app.post("/api/account/switch")
+def switch_account():
+    """Back to the account picker: end this process; the supervisor starts the picker on the same port."""
+    if os.environ.get("JOBAGENT_SUPERVISED") != "1":
+        raise HTTPException(400, "started with JOBAGENT_HOME - restart without it to switch accounts")
+
+    def bye():
+        if browser.thread and browser.thread.is_alive():      # close this account's Chrome window first
+            browser.q.put((None, None, None))
+            browser.thread.join(5)
+        os._exit(4)
+    threading.Timer(0.4, bye).start()
+    return {"ok": True}
+
+
 # ---------------------------------------------------------------- settings
 @app.get("/api/settings")
 def settings():
@@ -417,7 +440,7 @@ def settings():
             "cli_model": s["cli_model"], "openai": s["openai"], "presets": agent.OPENAI_PRESETS,
             "providers": agent.provider_status(), "review_mode": reviewer.mode(),
             "openai_keys": {p: bool(agent.openai_key(p)) for p in agent.OPENAI_PRESETS},
-            "owner": {k: store.owner().get(k) for k in ("name", "name_en", "short_name", "nickname", "avatar", "subtitle")}}
+            "owner": {k: store.owner().get(k) for k in ("name", "name_en", "short_name", "nickname", "avatar", "subtitle", "focus")}}
 
 
 @app.post("/api/settings/agent")
