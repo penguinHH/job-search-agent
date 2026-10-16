@@ -70,6 +70,13 @@ key) and add a Gmail **app password** per mail account. Keys and passwords are s
 (keyring), never in files. CV PDF export uses Microsoft Word (Windows COM); CV generator scripts are yours and are
 referenced from `owner.json` → `resume_builds`.
 
+### Accounts
+`python -m agent_app` opens an account picker first. Each account is a separate data folder – the original `资料/`
+is the account "default", new ones are created under `accounts/<slug>` by a six-step guide (basics, education and
+work, skills, preferences) that writes `profile.md` and `owner.json` and copies the public company list. Only one
+account runs at a time, in its own process; the button next to your name returns to the picker.
+`python -m agent_app --account <slug>` skips the picker; setting `JOBAGENT_HOME` runs that one folder as before.
+
 ### Claude Code skills
 `skills/` holds two skills for using the same database from Claude Code: `japan-job-search` (ranking, research,
 drafting, pipeline updates) and `sns-messaging` (tone and format for LinkedIn / Wantedly / DM replies). Copy them

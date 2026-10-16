@@ -17,18 +17,20 @@ Freshness:
 import argparse
 import hashlib
 import json
+import os
 import re
 import sys
 import threading
 import time
 from datetime import datetime, timedelta
+from pathlib import Path
 
 import numpy as np
 
 from . import store
 
 MODEL_NAME = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-MODEL_DIR = store.HOME / "data" / "models"
+MODEL_DIR = Path(os.environ.get("JOBAGENT_MODELS") or store.HOME / "data" / "models")   # shared across accounts
 CHUNK_CHARS, CHUNK_OVERLAP = 320, 60
 FULL_EVERY = timedelta(hours=24)
 RESCRAPE_MIN_GAP = timedelta(hours=6)

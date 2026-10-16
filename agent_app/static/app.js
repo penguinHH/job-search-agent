@@ -4,7 +4,7 @@
 // ================================================================== i18n
 const I18N = {
   zh: {
-    brand: "求职 Agent", brandSub: "日本科技创业公司求职",
+    brand: "求职 Agent", brandSub: "日本科技创业公司求职", focusDefault: "最适合我的", switchAcct: "切换账号", switchConfirm: "回到账号选择？当前账号的 agent 会停止。", switching: "正在返回账号选择…",
     nav_dashboard: "总览", nav_chat: "Agent 对话", nav_approvals: "待审批", nav_pipeline: "进度看板", nav_companies: "公司库",
     nav_notes: "笔记", notesSub: "学习笔记、面试笔记和总的待办清单。agent 和 Claude Code 都会读写这里。", tab_study: "学习笔记", tab_interview: "面试笔记", tab_todo: "待办总览", noteStudy: "学习笔记", noteInterview: "面试笔记", noNotes: "还没有笔记", markDone: "标记完成", reopen: "重新打开", editNote: "编辑", saveNote: "保存", cancel: "取消", newNote: "新建笔记", noteTitle: "标题", noteCompany: "关联公司 ID（可空）", noteDue: "截止（可空）", done: "已完成", openN: "{n} 项未完成", general: "通用", hasStudy: "有学习笔记", hasInterview: "有面试笔记", prepNotes: "让 agent 更新笔记",
     rv_title: "文书审查", rv_running: "审查 agent 检查中…", rv_ok: "审查通过，没有发现问题", rv_n: "{n} 条修改建议", rv_applied: "已应用修改", rv_auto: "已自动修改（可撤销）", rv_failed: "审查失败", rv_dismissed: "已忽略", rv_applySel: "应用所选", rv_applyAll: "全部采用修订版", rv_dismiss: "忽略", rv_revert: "撤销修改", rv_showRevised: "查看修订版全文", rv_run: "让审查 agent 检查", rv_rerun: "重新审查", rv_del: "（删除）", sev_high: "重要", sev_medium: "建议", sev_low: "润色", rv_mode: "文书审查 sub agent", rv_modeSub: "主 agent 写好邮件或文书后，审查 agent 会按日英语法、敬语、文书写作原则和你的档案（防止编造）检查一遍。", rv_mode_off: "关闭", rv_mode_suggest: "提出建议，由我决定", rv_mode_auto: "高度自动：直接修改（保留原文可撤销）", rv_kb: "知识库：agent_app/reviewer_kb/（日语语法与敬语、英语语法、写作原则）；个人规则可写在 资料/reviewer_knowledge.md",
@@ -18,7 +18,7 @@ const I18N = {
     st_companies: "公司库（A 类）", st_applied: "已投递", st_replies: "回复 / 面试", st_pending: "待审批", st_mail: "未读求职邮件", st_questions: "待答问题",
     followups: "需要跟进（投递 ≥7 天未回复）", pendingTitle: "待审批", recentMail: "最近的求职邮件", openQ: "等你回答的问题", funnel: "投递漏斗",
     none: "暂无", writeFollowup: "让 agent 写跟进", goApprove: "去审批", goAnswer: "去回答", noMail: "还没有抓取邮件",
-    quick: ["检查两个邮箱有没有公司回信，帮我总结并起草回复", "从公司库再挑 10 家还没投的化学·材料类公司，调研后排名", "列出需要跟进的公司并写跟进邮件", "帮我准备下一场面试"],
+    quick: ["检查邮箱里有没有公司回信，帮我总结并起草回复", "从公司库再挑 10 家还没投的{focus}公司，调研后排名", "列出需要跟进的公司并写跟进邮件", "帮我准备下一场面试"],
     newChat: "新对话", del: "删除", confirmDel: "删除这个对话？", placeholder: "告诉 agent 要做什么…（Enter 发送，Shift+Enter 换行）",
     send: "发送", stop: "停止", thinking: "思考中…", gateNote: "发邮件和提交表单都会先进入「待审批」", interrupted: "连接中断：",
     welcomeT: "我能帮你做什么？", welcomeS: "查公司库、上网调研、写中日英文书、发邮件（需审批）、填网页表单（提交需审批）、读回信、记录进度。",
@@ -60,7 +60,7 @@ const I18N = {
     types: { "1": "化学·材料", "2": "IT", "1,2": "化学+IT", other: "其他" },
   },
   ja: {
-    brand: "就活エージェント", brandSub: "日本のテック系スタートアップ",
+    brand: "就活エージェント", brandSub: "日本のテック系スタートアップ", focusDefault: "自分に合う", switchAcct: "アカウント切替", switchConfirm: "アカウント選択に戻りますか？このアカウントのエージェントは停止します。", switching: "アカウント選択に戻っています…",
     nav_dashboard: "ダッシュボード", nav_chat: "エージェント", nav_approvals: "承認待ち", nav_pipeline: "選考ボード", nav_companies: "企業DB",
     nav_notes: "ノート", notesSub: "学習ノート・面接ノート・全体の To Do。エージェントと Claude Code の両方が読み書きします。", tab_study: "学習ノート", tab_interview: "面接ノート", tab_todo: "To Do 一覧", noteStudy: "学習ノート", noteInterview: "面接ノート", noNotes: "ノートはまだありません", markDone: "完了にする", reopen: "未完了に戻す", editNote: "編集", saveNote: "保存", cancel: "キャンセル", newNote: "新規ノート", noteTitle: "タイトル", noteCompany: "関連企業 ID（任意）", noteDue: "期限（任意）", done: "完了", openN: "未完了 {n} 件", general: "共通", hasStudy: "学習ノートあり", hasInterview: "面接ノートあり", prepNotes: "エージェントにノートを更新させる",
     rv_title: "文書レビュー", rv_running: "レビューエージェントが確認中…", rv_ok: "問題は見つかりませんでした", rv_n: "修正提案 {n} 件", rv_applied: "修正を反映済み", rv_auto: "自動で修正済み（元に戻せます）", rv_failed: "レビュー失敗", rv_dismissed: "無視しました", rv_applySel: "選択した提案を反映", rv_applyAll: "修正版をすべて採用", rv_dismiss: "無視", rv_revert: "元に戻す", rv_showRevised: "修正版の全文を表示", rv_run: "レビューエージェントに確認させる", rv_rerun: "再レビュー", rv_del: "（削除）", sev_high: "重要", sev_medium: "提案", sev_low: "推敲", rv_mode: "文書レビュー サブエージェント", rv_modeSub: "メインエージェントがメールや書類を作ると、レビューエージェントが日英文法・敬語・書類作成の原則・プロフィールとの事実整合をチェックします。", rv_mode_off: "オフ", rv_mode_suggest: "提案のみ（反映は自分で決める）", rv_mode_auto: "高度自動：直接修正（元に戻せます）", rv_kb: "知識ベース：agent_app/reviewer_kb/（日本語文法・敬語、英文法、書類の原則）。個人ルールは 資料/reviewer_knowledge.md に。",
@@ -74,7 +74,7 @@ const I18N = {
     st_companies: "企業DB（A区分）", st_applied: "応募済み", st_replies: "返信 / 面接", st_pending: "承認待ち", st_mail: "未読メール", st_questions: "未回答の質問",
     followups: "フォローが必要（応募後7日以上返信なし）", pendingTitle: "承認待ち", recentMail: "最近の選考メール", openQ: "回答待ちの質問", funnel: "選考ファネル",
     none: "なし", writeFollowup: "フォローメールを作成", goApprove: "承認へ", goAnswer: "回答へ", noMail: "まだメールを取得していません",
-    quick: ["2つのメールボックスで企業からの返信を確認し、要約して返信案を作成", "未応募の化学・材料系企業を10社選び、調査してランキング", "フォローが必要な企業を挙げてフォローメールを作成", "次の面接の準備を手伝って"],
+    quick: ["メールで企業からの返信を確認し、要約して返信案を作成", "未応募の{focus}企業を10社選び、調査してランキング", "フォローが必要な企業を挙げてフォローメールを作成", "次の面接の準備を手伝って"],
     newChat: "新しい会話", del: "削除", confirmDel: "この会話を削除しますか？", placeholder: "エージェントへの指示…（Enterで送信、Shift+Enterで改行）",
     send: "送信", stop: "停止", thinking: "考え中…", gateNote: "メール送信とフォーム提出は必ず「承認待ち」を経由します", interrupted: "接続が切れました：",
     welcomeT: "何をお手伝いしましょう？", welcomeS: "企業DB検索、Web調査、中日英の書類作成、メール送信（承認制）、フォーム入力（提出は承認制）、返信対応、進捗管理。",
@@ -116,7 +116,7 @@ const I18N = {
     types: { "1": "化学・材料", "2": "IT", "1,2": "化学+IT", other: "その他" },
   },
   en: {
-    brand: "Job Agent", brandSub: "Japan tech-startup search",
+    brand: "Job Agent", brandSub: "Japan tech-startup search", focusDefault: "best-fitting", switchAcct: "Switch account", switchConfirm: "Go back to the account list? The agent for this account will stop.", switching: "Returning to the account list…",
     nav_dashboard: "Dashboard", nav_chat: "Agent", nav_approvals: "Approvals", nav_pipeline: "Pipeline", nav_companies: "Companies",
     nav_notes: "Notes", notesSub: "Study notes, interview notes and the overall to-do list. Read and written by the agent and Claude Code.", tab_study: "Study", tab_interview: "Interviews", tab_todo: "To-do overview", noteStudy: "Study notes", noteInterview: "Interview notes", noNotes: "No notes yet", markDone: "Mark done", reopen: "Reopen", editNote: "Edit", saveNote: "Save", cancel: "Cancel", newNote: "New note", noteTitle: "Title", noteCompany: "Company ID (optional)", noteDue: "Due (optional)", done: "Done", openN: "{n} open", general: "General", hasStudy: "Has study notes", hasInterview: "Has interview notes", prepNotes: "Ask the agent to update notes",
     rv_title: "Writing review", rv_running: "Reviewer is checking…", rv_ok: "No issues found", rv_n: "{n} suggestions", rv_applied: "Changes applied", rv_auto: "Auto-corrected (can undo)", rv_failed: "Review failed", rv_dismissed: "Dismissed", rv_applySel: "Apply selected", rv_applyAll: "Use revised version", rv_dismiss: "Dismiss", rv_revert: "Undo", rv_showRevised: "Show full revised text", rv_run: "Ask the reviewer", rv_rerun: "Review again", rv_del: "(delete)", sev_high: "Important", sev_medium: "Suggestion", sev_low: "Polish", rv_mode: "Writing reviewer sub-agent", rv_modeSub: "After the main agent writes an e-mail or document, the reviewer checks Japanese/English grammar, keigo, writing principles and facts against your profile.", rv_mode_off: "Off", rv_mode_suggest: "Suggest – I decide", rv_mode_auto: "Highly automatic – apply directly (original kept for undo)", rv_kb: "Knowledge base: agent_app/reviewer_kb/ (Japanese grammar & keigo, English grammar, writing principles); personal rules in 资料/reviewer_knowledge.md",
@@ -130,7 +130,7 @@ const I18N = {
     st_companies: "Companies (class A)", st_applied: "Applied", st_replies: "Replies / interviews", st_pending: "Approvals", st_mail: "Unread job mail", st_questions: "Open questions",
     followups: "Follow-ups due (no reply ≥7 days)", pendingTitle: "Waiting for approval", recentMail: "Recent job mail", openQ: "Questions for you", funnel: "Funnel",
     none: "Nothing", writeFollowup: "Draft follow-up", goApprove: "Review", goAnswer: "Answer", noMail: "No mail fetched yet",
-    quick: ["Check both mailboxes for company replies, summarise and draft answers", "Pick 10 uncontacted chemistry/materials companies, research and rank them", "List follow-ups due and draft the emails", "Help me prepare for my next interview"],
+    quick: ["Check my mailboxes for company replies, summarise and draft answers", "Pick 10 uncontacted {focus} companies, research and rank them", "List follow-ups due and draft the emails", "Help me prepare for my next interview"],
     newChat: "New chat", del: "Delete", confirmDel: "Delete this chat?", placeholder: "Tell the agent what to do… (Enter to send, Shift+Enter for a new line)",
     send: "Send", stop: "Stop", thinking: "Thinking…", gateNote: "Emails and form submissions always go to Approvals first", interrupted: "Connection lost: ",
     welcomeT: "What can I do for you?", welcomeS: "Search the company DB, research online, write in Chinese/Japanese/English, send email (approved), fill web forms (submit approved), handle replies, track progress.",
@@ -264,7 +264,7 @@ function md(src) {
 }
 
 // ================================================================== shell (sidebar + topbar)
-let SETTINGS = null, BADGES = {}, OWNER = {};
+let SETTINGS = null, BADGES = {}, OWNER = {}, WHO = {};
 const NAV = ["dashboard", "chat", "approvals", "pipeline", "companies", "inbox", "notes", "documents", "profile"];
 function renderSide() {
   const side = $("#side"); side.innerHTML = "";
@@ -276,7 +276,8 @@ function renderSide() {
     h("div", { class: "spacer" }),
     navBtn("settings"),
     h("div", { class: "sep" }),
-    h("div", { class: "me" }, h("div", { class: "avatar" }, OWNER.avatar || "🙂"), h("div", {}, h("div", { class: "n" }, [OWNER.name, OWNER.nickname].filter(Boolean).join(" ")), h("div", { class: "s" }, (OWNER.subtitle || {})[LANG] || ""))));
+    h("div", { class: "me" }, h("div", { class: "avatar" }, OWNER.avatar || "🙂"), h("div", {}, h("div", { class: "n" }, [OWNER.name, OWNER.nickname].filter(Boolean).join(" ")), h("div", { class: "s" }, (OWNER.subtitle || {})[LANG] || "")),
+      WHO.can_switch ? h("button", { class: "iconbtn switch", title: T("switchAcct"), onclick: switchAccount }, icon("sync")) : null));
 }
 function renderTop(title) {
   const top = $("#topbar"); top.innerHTML = "";
@@ -311,7 +312,22 @@ function toggleTheme() {
   try { localStorage.setItem("theme", next); } catch (_) {}
 }
 try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (_) {}
-async function loadSettings() { SETTINGS = await api("/api/settings"); OWNER = SETTINGS.owner || {}; LANG = SETTINGS.lang || "zh"; document.documentElement.lang = LANG; }
+async function loadSettings() { WHO = await api("/api/whoami").catch(() => ({})); SETTINGS = await api("/api/settings"); OWNER = SETTINGS.owner || {}; LANG = SETTINGS.lang || "zh"; document.documentElement.lang = LANG; }
+// quick prompts follow the account's own profile (owner.json "focus": industries / roles from the new-account guide)
+function quickPrompts() {
+  const f = OWNER.focus, focus = (f && typeof f === "object" ? f[LANG] || f.zh || f.en : f) || T("focusDefault");
+  return T("quick").map((t) => t.replace("{focus}", focus));
+}
+async function switchAccount() {
+  if (!confirm(T("switchConfirm"))) return;
+  await api("/api/account/switch", { method: "POST" });
+  document.body.innerHTML = `<main class="acct"><div class="acct-wait"><div class="spinner"></div>${esc(T("switching"))}</div></main>`;
+  for (let i = 0; i < 120; i++) {      // this process exits; the supervisor starts the account picker on the same port
+    await new Promise((r) => setTimeout(r, 700));
+    try { const r = await fetch("/api/accounts"); if (r.ok) { location.href = "/"; return; } } catch (_) {}
+  }
+  location.reload();
+}
 async function refreshBadges() { try { BADGES = await api("/api/stats"); renderSide(); } catch (_) {} }
 setInterval(refreshBadges, 30000);
 
@@ -337,7 +353,7 @@ pages.dashboard = async (main) => {
   const total = Object.values(p).reduce((a, b) => a + b, 0) || 1;
   main.append(h("div", { class: "page" },
     h("div", { class: "card hero" }, h("div", { class: "grow" }, h("h1", {}, T("hello", { name: (LANG === "en" ? OWNER.nickname || OWNER.name_en : OWNER.short_name) || "" })), h("p", {}, T("heroSub")),
-      h("div", { class: "chips", style: "margin:14px 0 0;max-width:none" }, T("quick").map((t) => h("span", { class: "chip", onclick: () => askAgent(t) }, t))))),
+      h("div", { class: "chips", style: "margin:14px 0 0;max-width:none" }, quickPrompts().map((t) => h("span", { class: "chip", onclick: () => askAgent(t) }, t))))),
     h("div", { class: "grid cols-6", style: "margin-top:16px" },
       stat(s.companies, T("st_companies"), "building", "c-indigo", "companies"), stat(applied, T("st_applied"), "send", "c-sky", "pipeline"),
       stat((p.replied || 0) + (p.interview || 0), T("st_replies"), "chat", "c-green", "pipeline"), stat(s.pending_actions, T("st_pending"), "approvals", "c-orange", "approvals"),
