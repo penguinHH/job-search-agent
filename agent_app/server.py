@@ -172,6 +172,43 @@ def delete_note(nid: int):
     return {"ok": True}
 
 
+# ---------------------------------------------------------------- company intelligence (RAG)
+@app.on_event("startup")
+def _start_intel():
+    import os
+    if os.environ.get("JOBAGENT_INTEL_WORKER", "1") == "0":     # e.g. test servers
+        return
+    from . import intel
+    intel.start_worker()
+
+
+@app.get("/api/intel/status")
+def intel_status():
+    from . import intel
+    return intel.status()
+
+
+@app.get("/api/intel/search")
+def intel_search(q: str, k: int = 10, company_id: int | None = None, contacted: str = ""):
+    from . import intel
+    return intel.search(q, k, company_id, None if not contacted else contacted == "yes")
+
+
+@app.post("/api/intel/full")
+def intel_full():
+    from . import intel
+    if intel.STATUS["running"]:
+        raise HTTPException(409, "already running")
+    threading.Thread(target=intel.daily_update, kwargs={"progress": lambda m: intel.STATUS.update(progress=m)},
+                     daemon=True).start()
+    return {"ok": True}
+
+
+@app.post("/api/intel/company/{cid}")
+def intel_company(cid: int):
+    return {"result": tools.refresh_intel(cid)}
+
+
 # ---------------------------------------------------------------- reviewer sub-agent
 @app.get("/api/reviews")
 def reviews(target_kind: str = ""):

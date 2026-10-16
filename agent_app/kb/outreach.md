@@ -85,3 +85,12 @@ interview language (PREP: conclusion first, ~1 minute each; spoken Japanese uses
 explanation at three depths (30 s / 2 min / technical) → why startup, why now, why this company → visa and
 start-date answer → honest answers for gaps → reverse questions with a hypothesis and intent → closing words →
 1-minute self-introduction.
+
+## SNS / chat messages (LinkedIn, Wantedly, DMs) – different from e-mail
+- Read the whole thread and mirror the counterpart's length and tone; a two-line message gets a short reply.
+- Japanese: polite です・ます but light (「ありがとうございます」「ぜひお話を伺いたいです」「〜できたら嬉しいです」); no
+  e-mail formulas (「お世話になっております」「何卒よろしくお願い申し上げます」「〜させていただきたく存じます」), no 宛名 block
+  (「〇〇さん」 on the first line is enough), no signature block. English: "Hi <first name>," … "Best, <name>".
+- 3–8 short lines (~150–350 字), conclusion first, one topic, one clear ask; time slots may be a short list.
+- If the person corrected you, acknowledge it in one line and move on. Honesty about gaps in one short clause.
+- Facts only from the profile; the company's current business checked on its live site first.

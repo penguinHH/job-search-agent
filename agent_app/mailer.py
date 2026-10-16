@@ -151,6 +151,10 @@ def _match_company(from_addr, subject, body):
 def fetch(acc_id=None, days=14, only_jobs=True):
     """Fetch recent mail from INBOX into the inbox table. Returns number of new messages stored."""
     targets = [account(acc_id)] if acc_id else [a for a in accounts() if a["has_password"]]
+    if not targets:
+        # Without this, a missing app password made every fetch silently return 0 new mails.
+        raise RuntimeError("没有邮箱设置了应用专用密码，无法收信（设置页面 → 邮箱）: "
+                           + ", ".join(a["address"] for a in accounts()))
     new = 0
     since = (datetime.now() - timedelta(days=days)).strftime("%d-%b-%Y")
     for a in targets:

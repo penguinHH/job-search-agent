@@ -28,6 +28,11 @@ reads company replies and tracks every application on a kanban board.
   grammar, writing principles for e-mails / 履歴書 / CVs / cover letters / form answers) and a fact check against the
   profile. Mode in Settings: off / suggest (you pick which suggestions to apply) / auto (applied directly, undoable).
   The agent can also call `review_text` before filling web forms.
+- **Company intelligence (RAG)** – `agent_app/intel.py`: every company's website, careers page, score, pipeline,
+  mails, notes and documents are chunked and indexed with a local multilingual embedding model (fastembed, no API
+  key) plus an SQLite FTS5 trigram index; hybrid search via the `search_intel` tool and the Companies page. Every 24 h
+  all websites are re-scraped and the index refreshed; SQLite triggers re-index a company within seconds of new
+  progress (also when the change comes from `jobdb.py`). CLI: `python -m agent_app.intel status|search|rebuild|daily`.
 - **Shared rules** – `agent_app/kb/` (outreach rules, fit-scoring rubric) is loaded into every agent conversation
   and used by Claude Code sessions too; personal rules and scoring anchors stay in the data folder's `knowledge.md`.
 - **Notes** – study notes (coding tests, problem sets, topics to learn), interview notes (prep, predicted Q&A,
@@ -46,6 +51,7 @@ agent_app/      GUI + agent (FastAPI backend, single-page frontend in static/)
 scrapers/       company sources + website enrichment
 classify.py     A/B and type classification       jobdb.py   CLI for the database
 send_mail.py    stand-alone mail sender           config.py  paths (code vs. personal data)
+skills/         Claude Code skills (job-search workflow, SNS message style)
 资料.example/    template for your personal data folder
 ```
 Everything personal – database, profile, CVs, mails, browser login – lives in a separate data folder
@@ -63,6 +69,14 @@ In **Settings** choose a back-end (Claude CLI needs Claude Code installed and lo
 key) and add a Gmail **app password** per mail account. Keys and passwords are stored in the OS credential store
 (keyring), never in files. CV PDF export uses Microsoft Word (Windows COM); CV generator scripts are yours and are
 referenced from `owner.json` → `resume_builds`.
+
+### Claude Code skills
+`skills/` holds two skills for using the same database from Claude Code: `japan-job-search` (ranking, research,
+drafting, pipeline updates) and `sns-messaging` (tone and format for LinkedIn / Wantedly / DM replies). Copy them
+into `.claude/skills/` to enable them; your personal rules stay in `资料/knowledge.md` and the profile.
+```bash
+mkdir -p .claude/skills && cp -r skills/* .claude/skills/
+```
 
 ## Requirements
 Python 3.11+, Google Chrome (for the form assistant), Windows recommended (Word PDF export).
